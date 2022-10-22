@@ -44,6 +44,9 @@ RPCPASS=$(set_default "$RPCPASS" "devpass")
 DEBUG=$(set_default "$DEBUG" "debug")
 NETWORK=$(set_default "$NETWORK" "simnet")
 CHAIN=$(set_default "$CHAIN" "bitcoin")
+ADMIN_MACAROON_PATH=$(set_default "$ADMIN_MACAROON_PATH" "/root/.lnd/data/chain/bitcoin/simnet/admin.macaroon")
+READONLY_MACAROON_PATH=$(set_default "$READONLY_MACAROON_PATH" "/root/.lnd/data/chain/bitcoin/simnet/read.macaroon")
+INVOICE_MACAROON_PATH=$(set_default "$INVOICE_MACAROON_PATH" "/root/.lnd/data/chain/bitcoin/simnet/invoice.macaroon")
 BACKEND="btcd"
 HOSTNAME=$(hostname)
 if [[ "$CHAIN" == "litecoin" ]]; then
@@ -61,10 +64,15 @@ exec lnd \
     "--$CHAIN.$NETWORK" \
     "--$CHAIN.node"="$BACKEND" \
     "--$BACKEND.rpccert"="/rpc/rpc.cert" \
-    "--$BACKEND.rpchost"="blockchain" \
+    "--$BACKEND.rpchost"="btcd" \
     "--$BACKEND.rpcuser"="$RPCUSER" \
     "--$BACKEND.rpcpass"="$RPCPASS" \
     "--rpclisten=$HOSTNAME:10009" \
     "--rpclisten=localhost:10009" \
+    "--tlsextradomain=alice" \
+    "--tlsextraip=192.168.16.3" \
+    "--adminmacaroonpath"="$ADMIN_MACAROON_PATH" \
+    "--readonlymacaroonpath"="$READONLY_MACAROON_PATH" \
+    "--invoicemacaroonpath"="$INVOICE_MACAROON_PATH" \
     --debuglevel="$DEBUG" \
     "$@"
