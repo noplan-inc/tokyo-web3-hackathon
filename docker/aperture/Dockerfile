@@ -30,7 +30,7 @@ COPY config.yml .
 # Add bash.
 RUN apk add --no-cache \
     bash \
-    ca-certificates
+    ca-certificates \
     curl
 
 # Copy the entrypoint script.
