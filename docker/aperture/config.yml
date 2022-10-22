@@ -108,7 +108,7 @@ services:
 #      tlscertpath: "path-to-pricer-server-tls-cert/tls.cert"
 
   - name: "service2"
-    hostregexp: "service2.com:8083"
+    hostregexp: "service2.com:8081"
     pathregexp: '^/.*$'
     address: "123.456.789:8082"
     protocol: http
