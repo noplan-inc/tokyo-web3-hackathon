@@ -130,3 +130,4 @@ exports
 *.cache
 build
 .strapi-updater.json
+default.profraw
