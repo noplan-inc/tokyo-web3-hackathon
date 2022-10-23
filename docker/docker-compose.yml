@@ -1,76 +1,87 @@
 version: '3'
 services:
-    # btc is an image of bitcoin node which used as base image for btcd and
-    # btccli. The environment variables default values determined on stage of
-    # container start within starting script.
-    btcd:
-      image: btcd
-      container_name: btcd
-      build:
-        context: btcd
-      volumes:
-        - shared:/rpc
-        - bitcoin:/data
-      environment:
-        - RPCUSER
-        - RPCPASS
-        - NETWORK
-        - DEBUG
-        - MINING_ADDRESS
-      entrypoint: ["./start-btcd.sh"]
+  # btc is an image of bitcoin node which used as base image for btcd and
+  # btccli. The environment variables default values determined on stage of
+  # container start within starting script.
+  btcd:
+    image: btcd
+    container_name: btcd
+    build:
+      context: btcd
+    volumes:
+      - shared:/rpc
+      - bitcoin:/data
+    environment:
+      - RPCUSER
+      - RPCPASS
+      - NETWORK
+      - DEBUG
+      - MINING_ADDRESS
+    entrypoint: [ "./start-btcd.sh" ]
 
-    lnd_alice:
-      image: lnd
-      container_name: lnd_alice
-      hostname: lnd_alice
-      build:
-        context: lnd
-      environment:
-        - RPCUSER
-        - RPCPASS
-        - NETWORK
-        - CHAIN
-        - DEBUG
-      volumes:
-        - shared:/rpc
-        - lnd_alice:/root/.lnd
-      entrypoint: ["./start-lnd.sh"]
-      depends_on:
-        - btcd
+  lnd_alice:
+    image: lnd
+    container_name: lnd_alice
+    hostname: lnd_alice
+    build:
+      context: lnd
+    environment:
+      - RPCUSER
+      - RPCPASS
+      - NETWORK
+      - CHAIN
+      - DEBUG
+    volumes:
+      - shared:/rpc
+      - lnd_alice:/root/.lnd
+    entrypoint: [ "./start-lnd.sh" ]
+    depends_on:
+      - btcd
 
-    lnd_bob:
-      image: lnd
-      container_name: lnd_bob
-      build:
-        context: lnd
-      environment:
-        - RPCUSER
-        - RPCPASS
-        - NETWORK
-        - CHAIN
-        - DEBUG
-      volumes:
-        - shared:/rpc
-        - lnd_bob:/root/.lnd
-      entrypoint: [ "./start-lnd.sh" ]
-      depends_on:
-        - btcd
+  lnd_bob:
+    image: lnd
+    container_name: lnd_bob
+    build:
+      context: lnd
+    environment:
+      - RPCUSER
+      - RPCPASS
+      - NETWORK
+      - CHAIN
+      - DEBUG
+    volumes:
+      - shared:/rpc
+      - lnd_bob:/root/.lnd
+    entrypoint: [ "./start-lnd.sh" ]
+    depends_on:
+      - btcd
 
-    aperture:
-      image: aperture
-      container_name: aperture
-      hostname: aperture
-      build:
-        context: aperture
-      entrypoint: [ "./start-aperture.sh" ]
-      volumes:
-        - shared:/rpc
-        - lnd_alice:/lnd
-      ports:
-        - "8081:8081"
-      depends_on:
-        - btcd
-        - lnd_alice
+  aperture:
+    image: aperture:latest
+    container_name: aperture
+    hostname: aperture
+    build:
+      context: aperture
+    entrypoint: [ "./start-aperture.sh" ]
+    volumes:
+      - shared:/rpc
+      - lnd_alice:/lnd
+    ports:
+      - "8081:8081"
+    depends_on:
+      - btcd
+      - lnd_alice
+      - etcd
+
+  etcd:
+    image: docker.io/bitnami/etcd:3.5
+    container_name: etcd
+    hostname: etcd
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    volumes:
+      - etcd_data:/bitnami/etcd
+
 
 volumes:
   # shared volume is need to store the btcd rpc certificates and use it within
@@ -92,4 +103,7 @@ volumes:
     driver: local
 
   lnd_bob:
+    driver: local
+
+  etcd_data:
     driver: local
