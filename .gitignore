@@ -122,3 +122,11 @@ dist
 
 
 .idea
+
+
+# strapi
+license.txt
+exports
+*.cache
+build
+.strapi-updater.json
