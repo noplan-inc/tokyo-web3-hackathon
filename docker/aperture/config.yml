@@ -40,9 +40,9 @@ authenticator:
 
 # Settings for the etcd instance which the proxy will use to reliably store and
 # retrieve token information.
-#etcd:
-#  # The client host:port which the etcd instance can be reached at.
-#  host: "localhost:2379"
+etcd:
+  # The client host:port which the etcd instance can be reached at.
+  host: "localhost:2379"
 #
 #  # If authentication is enabled, the user and password required to access the
 #  # etcd instance.
