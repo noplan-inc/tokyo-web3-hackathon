@@ -3,9 +3,19 @@ use sqlx::{Pool, Sqlite};
 
 #[derive(sqlx::FromRow, Debug, Default, Clone, PartialEq, Eq)]
 pub struct User {
-    id: u32,
-    name: String,
-    address: String,
+    pub id: u32,
+    pub name: String,
+    pub address: String,
+}
+
+impl User {
+    fn new(name: String, address: String) -> User {
+        Self {
+            name,
+            address,
+            ..Default::default()
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -60,12 +70,13 @@ impl UserRepositry {
         Ok(())
     }
 
-    pub async fn create2(&self, name: String, address: String) -> Result<()> {
+    pub async fn update(&self, id: u32, name: &String, address: &String) -> Result<()> {
         let mut pool = self.db.acquire().await?;
 
-        sqlx::query("INSERT INTO Users(name, address) VALUES(?, ?)")
+        sqlx::query("UPDATE Users SET name = ?, address = ? WHERE id = ?")
             .bind(name)
             .bind(address)
+            .bind(id)
             .execute(&mut pool)
             .await?;
         Ok(())
@@ -85,7 +96,7 @@ mod tests {
     }
     impl Drop for SetUpper {
         fn drop(&mut self) {
-            std::fs::remove_file(format!("./tmp/{}.db", self.db_id)).unwrap();
+            std::fs::remove_file(format!("./tmp/test/{}.db", self.db_id)).unwrap();
         }
     }
 
@@ -105,12 +116,11 @@ mod tests {
         let mut r = rand::thread_rng();
         let rand: u16 = r.gen_range(0..10000);
 
-        let pool = init_pool(format!("./tmp/{}.db", rand).as_str())
+        let pool = init_pool(format!("./tmp/test/{}.db", rand).as_str())
             .await
             .unwrap();
 
-        #[warn(unused_must_use)]
-        sqlx::migrate!("./migrations/").run(&pool).await;
+        let _ = sqlx::migrate!("./migrations/").run(&pool).await;
 
         let mut conn = pool.acquire().await.unwrap();
 
@@ -122,7 +132,7 @@ mod tests {
     #[tokio::test]
     async fn test_find_by_id() {
         let (db, db_id) = init_db().await;
-        let setupper = setup(db_id);
+        let _setupper = setup(db_id);
         let user_repo = UserRepositry::new(db);
 
         assert_eq!(user_repo.count().await.unwrap(), 1);
@@ -134,7 +144,7 @@ mod tests {
     #[tokio::test]
     async fn test_find_all() {
         let (db, db_id) = init_db().await;
-        let setupper = setup(db_id);
+        let _setupper = setup(db_id);
         let user_repo = UserRepositry::new(db);
 
         assert_eq!(user_repo.count().await.unwrap(), 1);
@@ -143,7 +153,7 @@ mod tests {
     #[tokio::test]
     async fn test_count() {
         let (db, db_id) = init_db().await;
-        let setupper = setup(db_id);
+        let _setupper = setup(db_id);
         let user_repo = UserRepositry::new(db);
 
         assert_eq!(user_repo.count().await.unwrap(), 1);
@@ -152,9 +162,58 @@ mod tests {
     #[tokio::test]
     async fn test_create() {
         let (db, db_id) = init_db().await;
-        let setupper = setup(db_id);
+        let _setupper = setup(db_id);
         let user_repo = UserRepositry::new(db);
 
         assert_eq!(user_repo.count().await.unwrap(), 1);
+
+        let name = &"alice".to_string();
+        let address = &"0xdeafbeaf...deadbeaf".to_string();
+
+        user_repo
+            .create(&name.clone(), &address.clone())
+            .await
+            .unwrap();
+
+        assert_eq!(user_repo.count().await.unwrap(), 2);
+
+        let u = user_repo.find_by_id(2).await.unwrap();
+        assert_eq!(
+            u,
+            User {
+                id: 2,
+                name: name.to_string(),
+                address: address.to_string()
+            }
+        )
+    }
+
+    #[tokio::test]
+    async fn test_update() {
+        let (db, db_id) = init_db().await;
+        let _setupper = setup(db_id);
+        let user_repo = UserRepositry::new(db);
+
+        assert_eq!(user_repo.count().await.unwrap(), 1);
+
+        let name = &"alice2".to_string();
+        let address = &"0xdeafbeaf...deadbeaf".to_string();
+
+        user_repo
+            .update(1, &name.clone(), &address.clone())
+            .await
+            .unwrap();
+
+        assert_eq!(user_repo.count().await.unwrap(), 1);
+
+        let u = user_repo.find_by_id(1).await.unwrap();
+        assert_eq!(
+            u,
+            User {
+                id: 1,
+                name: name.to_string(),
+                address: address.to_string()
+            }
+        )
     }
 }
