@@ -3,7 +3,7 @@ use sqlx::{Pool, Sqlite};
 
 #[derive(sqlx::FromRow, Debug, Default, Clone, PartialEq, Eq)]
 pub struct User {
-    pub id: u32,
+    pub id: i64,
     pub name: String,
     pub address: String,
 }
@@ -28,12 +28,12 @@ impl UserRepositry {
         Self { db }
     }
 
-    pub async fn find_by_id(&self, id: u32) -> Result<User> {
+    pub async fn find_by_id(&self, id: i64) -> Result<Option<User>> {
         let mut pool = self.db.acquire().await?;
 
-        let user: User = sqlx::query_as("select * from users where id = ?")
+        let user: Option<User> = sqlx::query_as("select * from users where id = ?")
             .bind(id)
-            .fetch_one(&mut pool)
+            .fetch_optional(&mut pool)
             .await?;
 
         Ok(user)
@@ -49,25 +49,46 @@ impl UserRepositry {
         Ok(users)
     }
 
-    pub async fn count(&self) -> Result<u32> {
+    pub async fn count(&self) -> Result<i64> {
         let mut pool = self.db.acquire().await?;
 
-        let user_count: u32 = sqlx::query_scalar("select count(*) from users")
+        let user_count: i64 = sqlx::query_scalar("select count(*) from users")
             .fetch_one(&mut pool)
             .await?;
 
         Ok(user_count)
     }
 
-    pub async fn create(&self, name: &String, address: &String) -> Result<()> {
+    pub async fn create<T>(&self, name: &String, address: &String, id: T) -> Result<User>
+    where
+        T: Into<Option<i64>>,
+    {
         let mut pool = self.db.acquire().await?;
 
-        sqlx::query("INSERT INTO Users(name, address) VALUES(?, ?)")
-            .bind(name)
-            .bind(address)
-            .execute(&mut pool)
-            .await?;
-        Ok(())
+        let _id = id.into();
+
+        let generated_id = if _id.is_none() {
+            sqlx::query("INSERT INTO Users(name, address) VALUES(?, ?)")
+                .bind(name)
+                .bind(address)
+                .execute(&mut pool)
+                .await?
+                .last_insert_rowid()
+        } else {
+            sqlx::query("INSERT INTO Users(id, name, address) VALUES(?, ?, ?)")
+                .bind(_id)
+                .bind(name)
+                .bind(address)
+                .execute(&mut pool)
+                .await?
+                .last_insert_rowid()
+        };
+
+        Ok(User {
+            id: generated_id,
+            name: name.to_string(),
+            address: address.to_string(),
+        })
     }
 
     pub async fn update(&self, id: u32, name: &String, address: &String) -> Result<()> {
@@ -137,8 +158,20 @@ mod tests {
 
         assert_eq!(user_repo.count().await.unwrap(), 1);
 
-        let user = user_repo.find_by_id(1).await.unwrap();
+        let user = user_repo.find_by_id(1).await.unwrap().unwrap();
         assert_eq!(user, fixture_user1());
+    }
+
+    #[tokio::test]
+    async fn test_find_by_id2() {
+        let (db, db_id) = init_db().await;
+        let _setupper = setup(db_id);
+        let user_repo = UserRepositry::new(db);
+
+        assert_eq!(user_repo.count().await.unwrap(), 1);
+
+        let user = user_repo.find_by_id(2).await.unwrap();
+        assert!(user.is_none());
     }
 
     #[tokio::test]
@@ -147,7 +180,29 @@ mod tests {
         let _setupper = setup(db_id);
         let user_repo = UserRepositry::new(db);
 
+        let alice = user_repo.find_by_id(1).await.unwrap().unwrap();
+
         assert_eq!(user_repo.count().await.unwrap(), 1);
+
+        let name = &"bob".to_string();
+        let address = &"0xdeafbeaf...deadbeaf".to_string();
+
+        user_repo
+            .create(&name.clone(), &address.clone(), None)
+            .await
+            .unwrap();
+
+        let users = user_repo.find_all().await.unwrap();
+
+        assert_eq!(users[0], alice);
+        assert_eq!(
+            users[1],
+            User {
+                id: 2,
+                name: name.to_string(),
+                address: address.to_string()
+            }
+        );
     }
 
     #[tokio::test]
@@ -171,13 +226,13 @@ mod tests {
         let address = &"0xdeafbeaf...deadbeaf".to_string();
 
         user_repo
-            .create(&name.clone(), &address.clone())
+            .create(&name.clone(), &address.clone(), None)
             .await
             .unwrap();
 
         assert_eq!(user_repo.count().await.unwrap(), 2);
 
-        let u = user_repo.find_by_id(2).await.unwrap();
+        let u = user_repo.find_by_id(2).await.unwrap().unwrap();
         assert_eq!(
             u,
             User {
@@ -206,7 +261,7 @@ mod tests {
 
         assert_eq!(user_repo.count().await.unwrap(), 1);
 
-        let u = user_repo.find_by_id(1).await.unwrap();
+        let u = user_repo.find_by_id(1).await.unwrap().unwrap();
         assert_eq!(
             u,
             User {
