@@ -59,7 +59,7 @@ impl UserRepositry {
         Ok(user_count)
     }
 
-    pub async fn create<T>(&self, name: &String, address: &String, id: T) -> Result<User>
+    pub async fn create<T>(&self, name: &str, address: &str, id: T) -> Result<User>
     where
         T: Into<Option<i64>>,
     {
@@ -91,7 +91,7 @@ impl UserRepositry {
         })
     }
 
-    pub async fn update(&self, id: u32, name: &String, address: &String) -> Result<()> {
+    pub async fn update(&self, id: u32, name: &str, address: &str) -> Result<()> {
         let mut pool = self.db.acquire().await?;
 
         sqlx::query("UPDATE Users SET name = ?, address = ? WHERE id = ?")
