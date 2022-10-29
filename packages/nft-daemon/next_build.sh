@@ -8,9 +8,10 @@ DOMAIN=$1;
 
 
 echo "cd "$WORK_DIR/$DOMAIN;
+pwd;
 cd "$WORK_DIR/$DOMAIN";
 
 echo "yarn build...";
 yarn build;
 
-echo "finish!!!";
+echo "build finish!!!";

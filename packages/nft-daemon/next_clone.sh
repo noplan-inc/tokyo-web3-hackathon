@@ -23,3 +23,4 @@ echo "yarn build...";
 
 yarn build;
 
+echo "clone finish!!!"
