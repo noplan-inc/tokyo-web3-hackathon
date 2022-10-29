@@ -3,10 +3,10 @@ use sqlx::{Pool, Sqlite};
 
 #[derive(sqlx::FromRow, Debug, PartialEq, Eq)]
 pub struct Website {
-    id: i64,
-    name: String,
-    domain: String,
-    token_id: String,
+    pub id: i64,
+    pub name: String,
+    pub domain: String,
+    pub token_id: String,
 }
 
 #[derive(Debug, Clone)]
@@ -55,9 +55,9 @@ impl WebsiteRepositry {
 
     pub async fn create<T>(
         &self,
-        name: &String,
-        domain: &String,
-        token_id: &String,
+        name: &str,
+        domain: &str,
+        token_id: &str,
         id: T,
     ) -> Result<Website>
     where
@@ -138,12 +138,7 @@ mod tests {
         let web_repo = WebsiteRepositry::new(pool.clone());
 
         let _ = web_repo
-            .create(
-                &String::from("alice"),
-                &String::from("alice.example.com"),
-                &String::from("100"),
-                None,
-            )
+            .create("alice", "alice.example.com", "100", None)
             .await;
 
         (pool, rand)
@@ -190,14 +185,11 @@ mod tests {
 
         assert_eq!(web_repo.count().await.unwrap(), 1);
 
-        let name = &"alice".to_string();
-        let domain = &"alice2.example.com".to_string();
-        let token_id = &"200".to_string();
+        let name = "alice";
+        let domain = "alice2.example.com";
+        let token_id = "200";
 
-        web_repo
-            .create(&name.clone(), &domain.clone(), &token_id.clone(), None)
-            .await
-            .unwrap();
+        web_repo.create(name, domain, token_id, None).await.unwrap();
 
         assert_eq!(web_repo.count().await.unwrap(), 2);
 
