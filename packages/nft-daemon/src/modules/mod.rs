@@ -14,10 +14,18 @@ pub struct Modules {
 }
 
 impl Modules {
-    pub async fn new() -> Self {
-        let pool = init_pool("./tmp/dev.db")
-            .await
-            .expect("failed to open ./tmp/dev.db");
+    pub async fn new<T>(_pool: T) -> Self
+    where
+        T: Into<Option<Pool<Sqlite>>>,
+    {
+        let p = _pool.into();
+        let pool = if let Some(_p) = p {
+            _p
+        } else {
+            init_pool("./tmp/dev.db")
+                .await
+                .expect("failed to open ./tmp/dev.db")
+        };
 
         let user_repo = UserRepositry::new(pool.clone());
         let web_repo = WebsiteRepositry::new(pool.clone());

@@ -19,7 +19,7 @@ async fn main() {
         .nest("/strapi", create_strapi_router())
         .route("/healthcheck", get(root));
 
-    let module = Modules::new().await;
+    let module = Modules::new(None).await;
 
     // build our application with a route
     let app = Router::new()
