@@ -88,7 +88,7 @@ services:
     container_name: web
     hostname: webhost
     ports:
-      - "3000:80"
+      - "80:80"
     volumes:
       - shared:/rpc
       - ./aperture/static:/usr/local/apache2/htdocs/
