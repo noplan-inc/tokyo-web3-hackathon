@@ -68,7 +68,7 @@ services:
    pathregexp: '/api/.*$'
 
    # The host:port which the service can be reached at.
-   address: "webhost:80"
+   address: "nginx:80"
 
    # The HTTP protocol that should be used to connect to the service. Valid
    # options include: http, https.
