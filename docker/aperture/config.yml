@@ -65,7 +65,7 @@ services:
    hostregexp: '^hoge.example.com:80$'
 
    # The regular expression used to match the path of the URL.
-   pathregexp: '/api/.*$'
+   pathregexp: '/secret/.*$'
 
    # The host:port which the service can be reached at.
    address: "nginx:80"
