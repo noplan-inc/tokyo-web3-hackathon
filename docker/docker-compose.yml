@@ -115,6 +115,4 @@ volumes:
 
   etcd_data:
     driver: local
-  
-  web_data:
-    driver: local
+

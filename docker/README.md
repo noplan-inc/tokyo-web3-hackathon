@@ -71,11 +71,7 @@ Payment hash: f1a1e5164c5a2ec66c71be20bbb0acaff95aa24bfca74d45b463839aaf1e7b2a
 
 
 # host terminal
-docker compose up -d aperture etcd web
-
-
-
-
+docker compose up -d aperture etcd nginx
 
 
 
@@ -84,7 +80,7 @@ docker compose up -d aperture etcd web
 
 
 # down command
-docker compose down aperture etcd web
+docker compose down aperture etcd nginx
 
 
 ```
