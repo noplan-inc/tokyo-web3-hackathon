@@ -1,12 +1,17 @@
 use crate::{handlers::strapi::create_strapi_router, modules::Modules};
 use axum::{routing::get, Extension, Router};
+use dotenv::dotenv;
 use std::{net::SocketAddr, sync::Arc};
 
+mod errors;
 mod handlers;
 mod modules;
+mod repositories;
 
 #[tokio::main]
 async fn main() {
+    dotenv().ok();
+
     // initialize tracing
     tracing_subscriber::fmt::init();
 
@@ -14,7 +19,7 @@ async fn main() {
         .nest("/strapi", create_strapi_router())
         .route("/healthcheck", get(root));
 
-    let module = Modules::new().await;
+    let module = Modules::new(None).await;
 
     // build our application with a route
     let app = Router::new()
@@ -37,7 +42,7 @@ struct TableRow {
 }
 
 // basic handler that responds with a static string
-async fn root(Extension(modules): Extension<Arc<Modules>>) -> &'static str {
+async fn root(Extension(modules): Extension<Arc<Modules>>) -> String {
     let mut pool = modules.pool.acquire().await.unwrap();
     let table: Vec<TableRow> =
         sqlx::query_as("select name from sqlite_master where type = 'table'")
@@ -45,7 +50,11 @@ async fn root(Extension(modules): Extension<Arc<Modules>>) -> &'static str {
             .await
             .unwrap();
 
-    println!("{:?}", table);
-
-    "ok"
+    dbg!(format!(
+        "{:?}",
+        table
+            .iter()
+            .map(|t| t.name.clone())
+            .collect::<Vec<String>>()
+    ))
 }
