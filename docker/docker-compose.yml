@@ -82,7 +82,18 @@ services:
       - ALLOW_NONE_AUTHENTICATION=yes
     volumes:
       - etcd_data:/bitnami/etcd
-
+  
+  web:
+    image: httpd
+    container_name: web
+    hostname: webhost
+    ports:
+      - "3000:80"
+    volumes:
+      - shared:/rpc
+      - ./aperture/static:/usr/local/apache2/htdocs/
+    depends_on:
+      - aperture
 
 volumes:
   # shared volume is need to store the btcd rpc certificates and use it within
@@ -107,4 +118,7 @@ volumes:
     driver: local
 
   etcd_data:
+    driver: local
+  
+  web_data:
     driver: local
