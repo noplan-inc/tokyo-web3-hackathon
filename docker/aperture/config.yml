@@ -42,7 +42,8 @@ authenticator:
 # retrieve token information.
 etcd:
   # The client host:port which the etcd instance can be reached at.
-  host: "localhost:2379"
+  host: "etcd:2379"
+#  somaさん曰く 2380
 #
 #  # If authentication is enabled, the user and password required to access the
 #  # etcd instance.
