@@ -69,9 +69,8 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - btcd
-      - lnd_alice
       - etcd
+    restart: always
 
   etcd:
     image: docker.io/bitnami/etcd:3.5
@@ -81,7 +80,6 @@ services:
       - ALLOW_NONE_AUTHENTICATION=yes
     volumes:
       - etcd_data:/bitnami/etcd
-
   nginx:
     build:
       context: nginx
@@ -116,4 +114,7 @@ volumes:
     driver: local
 
   etcd_data:
+    driver: local
+  
+  web_data:
     driver: local

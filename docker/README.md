@@ -1,3 +1,110 @@
+## 動作確認
+
+
+```bash
+# host terminal
+$ docker compose run -d --rm --name alice lnd_alice 
+[+] Running 1/0
+ ⠿ Container btcd  Running                                                                                                                                                                                                                                                                                                                                                 0.0s
+docker_lnd_alice_run_13140f09ab08
+
+$ docker exec -it alice bash
+
+# alice terminal
+bash-5.1#  lncli --network=simnet newaddress np2wkh
+{
+    "address": "rrA7WpcqxyyMJJF3oXgCcnBp6imDRJ8MgR"
+}
+
+
+# host terminal
+MINING_ADDRESS=rrA7WpcqxyyMJJF3oXgCcnBp6imDRJ8MgR docker-compose up -d btcd
+
+
+docker exec -it btcd /start-btcctl.sh generate 400
+
+
+# alice terminal
+$ lncli --network=simnet walletbalance
+
+
+# host terminal
+docker compose run -d --rm --name bob lnd_bob 
+
+docker exec -it bob bash
+
+# bob terminal
+bash-5.1# lncli --network=simnet getinfo |grep identity
+    "identity_pubkey": "020a28e18340fdc32553aca3f4f1e5d72900331ecfec8cb999cb29026a3f0aafb1",
+    
+    
+# host terminal
+$ docker inspect bob | grep IPAddress
+            "SecondaryIPAddresses": null,
+            "IPAddress": "",
+                    "IPAddress": "172.19.0.4",
+
+# alice terminal
+$ lncli --network=simnet connect 020a28e18340fdc32553aca3f4f1e5d72900331ecfec8cb999cb29026a3f0aafb1@172.19.0.4
+
+$ lncli --network=simnet openchannel --node_key=020a28e18340fdc32553aca3f4f1e5d72900331ecfec8cb999cb29026a3f0aafb1 --local_amt=1000000
+
+
+# host terminal 
+$ docker exec -it btcd /start-btcctl.sh generate 400
+
+
+# bob terminal
+bash-5.1# lncli --network=simnet addinvoice --amt=10000
+{
+    "r_hash": "f1a1e5164c5a2ec66c71be20bbb0acaff95aa24bfca74d45b463839aaf1e7b2a",
+    "payment_request": "lnsb100u1p34ug5gpp5y94xmt42qk2lguflclqa8kg7rr8zdw7zzv2xp8qaeh4h9pch952qdqqcqzpgxqyz5vqsp50wad7x8jpn4w99cy0ap7vuld7xj3mfv4quslwmke6medzqf8uexs9qyyssqwgku946lwr9a53863h5dysl9r2l78p0en854a0ppfr2zw4j3ev6nzddh59w3le0va4vak404v48v4a0ve9jwph5dfe79eadqhzauz5sqqfylgw",
+    "add_index": "1",
+    "payment_addr": "9f1e13f850f01ed44536a1cbbb36c8675c080069d2376d05203e30cd71422d5f"
+}
+
+
+# alice terminal
+bash-5.1# lncli --network=simnet payinvoice --pay_req=lnsb100u1p34urrqpp57xs729jvtghvvmr3hcsthv9v4lu44gjtljn563d5vwpe4tc70v4qdqqcqzpgxqyz5vqsp5nu0p87zs7q0dg3fk589mkdkgvawqsqrf6gmk6pfq8ccv6u2z940s9qyyssq5pdy5l7e2w94fd3jvf4y6ruvth8s87hr8djg64ccnds52g3kuzvkgw2dtm06q57phatr2j4h02kjck772vyyql4u2r6wjalh0gpzkkspl3w4sx
+Payment hash: f1a1e5164c5a2ec66c71be20bbb0acaff95aa24bfca74d45b463839aaf1e7b2a
+
+
+
+# host terminal
+docker compose up -d aperture etcd web
+
+
+
+
+
+
+
+
+
+
+
+# down command
+docker compose down aperture etcd web
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 This document is written for people who are eager to do something with 
 the Lightning Network Daemon (`lnd`). This folder uses `docker-compose` to
 package `lnd` and `btcd` together to make deploying the two daemons as easy as
@@ -60,6 +167,8 @@ topology, and send a payment from `Alice` to `Bob`.
 Start `btcd`, and then create an address for `Alice` that we'll directly mine
 bitcoin into.
 ```shell
+$ docker compose up web aperture lnd_bob lnd_alice etcd
+
 # Init bitcoin network env variable:
 ⛰  export NETWORK="simnet" 
 
@@ -298,6 +407,7 @@ First of all you need to run `btcd` node in `testnet` and wait for it to be
 synced with test network (`May the Force and Patience be with you`).
 ```shell
 # Init bitcoin network env variable:
+$ docker compose up web aperture lnd_bob lnd_alice etcd
 ⛰  NETWORK="testnet" docker-compose up
 ```
 
