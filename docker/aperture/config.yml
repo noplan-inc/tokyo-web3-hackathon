@@ -12,7 +12,7 @@ servestatic: false
 # The log level that should be used for the proxy.
 #
 # Valid options include: trace, debug, info, warn, error, critical, off.
-debuglevel: "debug"
+debuglevel: "trace"
 
 # Whether the proxy should create a valid certificate through Let's Encrypt for
 # the fully qualifying domain name.
@@ -61,10 +61,10 @@ services:
  - name: "service1"
 
    # The regular expression used to match the service host.
-   hostregexp: 'webhost:80'
+   hostregexp: '^hoge.example.com:80$'
 
    # The regular expression used to match the path of the URL.
-   pathregexp: '/api'
+   pathregexp: '/api/.*$'
 
    # The host:port which the service can be reached at.
    address: "webhost:80"
