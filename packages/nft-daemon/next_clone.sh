@@ -2,7 +2,7 @@
 
 # bashのスイッチ
 set -euC
-WORK_DIR="tmp/site";
+WORK_DIR="/Users/serinuntius/src/github.com/noplan-inc/tokyo-web3-hackathon/docker/nginx/public";
 
 DOMAIN=$1;
 
