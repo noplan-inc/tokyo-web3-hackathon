@@ -23,4 +23,7 @@ echo "yarn build...";
 
 yarn build;
 
+# public/secretを生成するためには２回するしかないんや・・・。すまんな
+yarn build;
+
 echo "clone finish!!!"
