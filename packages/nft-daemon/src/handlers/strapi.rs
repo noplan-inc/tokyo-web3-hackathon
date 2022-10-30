@@ -259,7 +259,7 @@ mod test {
             .header("Content-Type", "application/json")
             .send()
             .await;
-        // assert_eq!(resp.status(), StatusCode::CREATED);
+        assert_eq!(resp.status(), StatusCode::CREATED);
         assert_eq!(resp.text().await, String::from("\"OK\""));
     }
 }

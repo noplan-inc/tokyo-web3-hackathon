@@ -80,18 +80,16 @@ services:
       - ALLOW_NONE_AUTHENTICATION=yes
     volumes:
       - etcd_data:/bitnami/etcd
-  
-  web:
-    image: httpd
-    container_name: web
-    hostname: webhost
+  nginx:
+    build:
+      context: nginx
+    container_name: nginx
+    hostname: nginx
     ports:
-      - "80:80"
+      - 80:80
     volumes:
-      - shared:/rpc
-      - ./aperture/static:/usr/local/apache2/htdocs/
-    depends_on:
-      - aperture
+      - ./nginx/public:/usr/share/nginx/html
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
 
 volumes:
   # shared volume is need to store the btcd rpc certificates and use it within
