@@ -12,7 +12,7 @@ servestatic: false
 # The log level that should be used for the proxy.
 #
 # Valid options include: trace, debug, info, warn, error, critical, off.
-debuglevel: "debug"
+debuglevel: "trace"
 
 # Whether the proxy should create a valid certificate through Let's Encrypt for
 # the fully qualifying domain name.
@@ -42,7 +42,8 @@ authenticator:
 # retrieve token information.
 etcd:
   # The client host:port which the etcd instance can be reached at.
-  host: "localhost:2379"
+  host: "etcd:2379"
+#  somaさん曰く 2380
 #
 #  # If authentication is enabled, the user and password required to access the
 #  # etcd instance.
@@ -58,63 +59,63 @@ etcd:
 services:
   # The identifying name of the service. This will also be used to identify
   # which capabilities caveat (if any) corresponds to the service.
-#  - name: "service1"
-#
-#    # The regular expression used to match the service host.
-#    hostregexp: '^service1.com$'
-#
-#    # The regular expression used to match the path of the URL.
-#    pathregexp: '^/.*$'
-#
-#    # The host:port which the service can be reached at.
-#    address: "127.0.0.1:10009"
-#
-#    # The HTTP protocol that should be used to connect to the service. Valid
-#    # options include: http, https.
-##    protocol: https
-#
-#    # If required, a path to the service's TLS certificate to successfully
-#    # establish a secure connection.
-##    tlscertpath: "path-to-optional-tls-cert/tls.cert"
-#
-#    # A comma-delimited list of capabilities that will be granted for tokens of
-#    # the service at the base tier.
-#    capabilities: "add,subtract"
-#
-#    # The set of constraints that are applied to tokens of the service at the
-#    # base tier.
-#    constraints:
-#      "valid_until": "2020-01-01"
-#
-#    # The LSAT value in satoshis for the service. It is ignored if
-#    # dynamicprice.enabled is set to true.
-#    price: 0
-#
-#    # Options to use for connection to the price serving gRPC server.
-#    dynamicprice:
-#      # Whether or not a gRPC server is available to query price data from. If
-#      # this option is set to true then the 'price' option is ignored.
-#      enabled: true
-#
-#      # The address of the gRPC pricer server.
-#      grpcaddress: "127.0.0.1:10010"
-#
-#      # Whether or not TLS encryption should be used for communications with the
-#      # gRPC server.
-#      insecure: false
-#
-#      # The path to the pricer server's tls.cert. If the 'insecure' option is
-#      # set to true then this path must be set.
-#      tlscertpath: "path-to-pricer-server-tls-cert/tls.cert"
+ - name: "service1"
 
-  - name: "service2"
-    hostregexp: "service2.com:8081"
-    pathregexp: '^/.*$'
-    address: "123.456.789:8082"
-    protocol: http
-#    constraints:
-#      "valid_until": "2020-01-01"
-    price: 1
+   # The regular expression used to match the service host.
+   hostregexp: '^hoge.example.com:80$'
+
+   # The regular expression used to match the path of the URL.
+   pathregexp: '/secret/.*$'
+
+   # The host:port which the service can be reached at.
+   address: "nginx:80"
+
+   # The HTTP protocol that should be used to connect to the service. Valid
+   # options include: http, https.
+   protocol: http
+
+   # If required, a path to the service's TLS certificate to successfully
+   # establish a secure connection.
+#    tlscertpath: "path-to-optional-tls-cert/tls.cert"
+
+   # A comma-delimited list of capabilities that will be granted for tokens of
+   # the service at the base tier.
+  #  capabilities: "add,subtract"
+
+   # The set of constraints that are applied to tokens of the service at the
+   # base tier.
+  #  constraints:
+  #    "valid_until": "2020-01-01"
+
+   # The LSAT value in satoshis for the service. It is ignored if
+   # dynamicprice.enabled is set to true.
+   price: 1
+
+   # Options to use for connection to the price serving gRPC server.
+  #  dynamicprice:
+  #    # Whether or not a gRPC server is available to query price data from. If
+  #    # this option is set to true then the 'price' option is ignored.
+  #    enabled: true
+
+  #    # The address of the gRPC pricer server.
+  #    grpcaddress: "127.0.0.1:10010"
+
+  #    # Whether or not TLS encryption should be used for communications with the
+  #    # gRPC server.
+  #    insecure: false
+
+  #    # The path to the pricer server's tls.cert. If the 'insecure' option is
+  #    # set to true then this path must be set.
+  #    tlscertpath: "path-to-pricer-server-tls-cert/tls.cert"
+
+  # - name: "service2"
+  #   hostregexp: "service2.com:8081"
+  #   pathregexp: '^/.*$'
+  #   address: "123.456.789:8082"
+  #   protocol: http
+  #  constraints:
+  #    "valid_until": "2020-01-01"
+  #   price: 1
 
 #  - name: "service3"
 #    hostregexp: "service3.com:8083"

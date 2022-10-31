@@ -5,8 +5,38 @@ import Layout from "../../components/layout"
 import NextImage from "../../components/image"
 import Seo from "../../components/seo"
 import { getStrapiMedia } from "../../lib/media"
+import useSWR from "swr"
+import { Lsat } from "lsat-js"
+
+const fetcher = async (...path) => {
+  const res = await fetch(`${path}.json`)
+  let data = ""
+  if (res.status === 402) {
+    const header = res.headers.get("www-authenticate")
+    const lsat = Lsat.fromHeader(header)
+    console.log(`lsat.invoice: ${lsat.invoice}`)
+    const preimage = prompt(
+      "watch invoice in dev console & please payinvoice & fill preimage"
+    )
+    lsat.setPreimage(preimage)
+    const res = await fetch(`${path}.json`, {
+      headers: {
+        Authorization: lsat.toToken(),
+      },
+    })
+
+    data = await res.json()
+  } else {
+    data = await res.json()
+  }
+
+  return {
+    data: data.attributes.content,
+  }
+}
 
 const Article = ({ article, categories }) => {
+  const { data, error } = useSWR(`/secret/${article.attributes.slug}`, fetcher)
   const imageUrl = getStrapiMedia(article.attributes.image)
 
   const seo = {
@@ -30,10 +60,10 @@ const Article = ({ article, categories }) => {
       </div>
       <div className="uk-section">
         <div className="uk-container uk-container-small">
-          <ReactMarkdown
-            source={article.attributes.content}
-            escapeHtml={false}
-          />
+          {data && (
+            <ReactMarkdown escapeHtml={false}>{data.data}</ReactMarkdown>
+          )}
+
           <hr className="uk-divider-small" />
           <div className="uk-grid-small uk-flex-left" data-uk-grid="true">
             <div>
