@@ -31,6 +31,13 @@ contract WebmaSwap {
         _;
     }
 
+    modifier noReentrant(uint256 tokenId) {
+        require(!swaps[tokenId].locked, "No re-entrancy");
+        swaps[tokenId].locked = true;
+        _;
+        swaps[tokenId].locked = false;
+    }
+
 
     function open(uint256 tokenId, address erc20, uint256 price) public isOwner(tokenId)  {
         Swap memory newSwap = Swap(msg.sender, tokenId, erc20, price, false);
@@ -39,12 +46,12 @@ contract WebmaSwap {
         emit Open(tokenId, erc20,  price);
     }
 
-    function close(uint256 tokenId) public isOwner(tokenId) {
+    function close(uint256 tokenId) public isOwner(tokenId) noReentrant(tokenId) {
         delete swaps[tokenId];
         emit Close(tokenId);
     }
 
-    function fulfill(uint256 tokenId, address newOwner) public{
+    function fulfill(uint256 tokenId, address newOwner) public noReentrant(tokenId){
         Swap memory swap = swaps[tokenId];
         webmaTokenContract.transferFrom(swap.owner, newOwner, tokenId);
         delete swaps[tokenId];
