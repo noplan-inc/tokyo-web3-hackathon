@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 // _____________________________________________________________________________
 //
-const Setting: NextPage = () => {
-  return <div></div>;
+const Page: NextPage = () => {
+  return <div>Buy/tokenid</div>;
 };
 // _____________________________________________________________________________
 //
-export default Setting;
+export default Page;
