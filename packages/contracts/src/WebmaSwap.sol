@@ -37,7 +37,6 @@ contract WebmaSwap is ReentrancyGuard {
     function open(uint256 tokenId, address erc20, uint256 price) public isOwner(tokenId)  {
         Swap memory newSwap = Swap(msg.sender, tokenId, erc20, price, false);
         swaps[tokenId] = newSwap;
-        // webmaTokenContract.approve(address(this), tokenId);
         emit Open(tokenId, erc20,  price);
     }
 
