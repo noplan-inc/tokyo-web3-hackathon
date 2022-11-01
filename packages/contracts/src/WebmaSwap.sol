@@ -30,11 +30,16 @@ contract WebmaSwap is ReentrancyGuard {
     }
 
     modifier isOwner(uint256 tokenId){
-        require(msg.sender == swaps[tokenId].owner , "sender is not NFT owner.");
+        require(isOwnerDifferent(tokenId, msg.sender), "sender is not NFT owner.");
         _;
     }
 
+    function isOwnerDifferent(uint256 tokenId, address owner) internal view returns (bool) {
+        return owner == webmaTokenContract.ownerOf(tokenId);
+    }
+
     function open(uint256 tokenId, address erc20, uint256 price) public isOwner(tokenId)  {
+        require(webmaTokenContract.getApproved(tokenId) == address(this), "the token is not approved.");
         Swap memory newSwap = Swap(msg.sender, tokenId, erc20, price, false);
         swaps[tokenId] = newSwap;
         emit Open(tokenId, erc20,  price);
@@ -46,6 +51,7 @@ contract WebmaSwap is ReentrancyGuard {
     }
 
     function fulfill(uint256 tokenId, address newOwner) public nonReentrant(){
+        require(isOwnerDifferent(tokenId, swaps[tokenId].owner), "the token is already transfered");
         Swap memory swap = swaps[tokenId];
         webmaTokenContract.transferFrom(swap.owner, newOwner, tokenId);
         IERC20(swap.erc20).transfer(swap.owner, swap.price);
