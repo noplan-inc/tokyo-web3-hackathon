@@ -15,7 +15,6 @@ contract WebmaSwap is ReentrancyGuard {
         uint256 tokenId;
         address erc20;
         uint256 price;
-        bool locked;
     }
 
     mapping(uint256 => Swap) public swaps;
@@ -40,7 +39,7 @@ contract WebmaSwap is ReentrancyGuard {
 
     function open(uint256 tokenId, address erc20, uint256 price) public isOwner(tokenId)  {
         require(webmaTokenContract.getApproved(tokenId) == address(this), "token is not approved.");
-        Swap memory newSwap = Swap(msg.sender, tokenId, erc20, price, false);
+        Swap memory newSwap = Swap(msg.sender, tokenId, erc20, price);
         swaps[tokenId] = newSwap;
         emit Open(tokenId, erc20,  price);
     }
