@@ -87,6 +87,7 @@ contract WebmaSwapTest is Test {
         erc20Contract.approve(address(webmaSwap), webmaSwap.getSwap(tokenId).price);
         webmaSwap.fulfill(tokenId);
         assertEq(webmaToken.ownerOf(tokenId), user);
+        assertEq(erc20Contract.balanceOf(admin), price);
         vm.stopPrank();
     }
 
