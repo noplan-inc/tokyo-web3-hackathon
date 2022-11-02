@@ -47,7 +47,7 @@ contract WebmaSwapTest is Test {
         assertEq(webmaSwap.getSwap(1).price, price);
     }
 
-    function testRevert_Open( uint256 price) public {
+    function testRevert_senderIsNotNFTOwner( uint256 price) public {
         uint256 tokenId = 1;
         vm.startPrank(admin);
         webmaToken.approve(address(webmaSwap), tokenId);
