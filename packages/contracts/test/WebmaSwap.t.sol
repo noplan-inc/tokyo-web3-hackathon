@@ -68,8 +68,6 @@ contract WebmaSwapTest is Test {
         uint256 tokenId = 1;
         webmaToken.approve(address(webmaSwap), tokenId);
         webmaSwap.open(tokenId, erc20Address, price);
-        vm.stopPrank();
-        vm.startPrank(admin);
         webmaSwap.close(tokenId);
         assertEq(webmaSwap.getSwap(tokenId).owner, address(0));
         assertEq(webmaSwap.getSwap(tokenId).tokenId, 0);
