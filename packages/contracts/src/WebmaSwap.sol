@@ -39,7 +39,7 @@ contract WebmaSwap is ReentrancyGuard {
     }
 
     function open(uint256 tokenId, address erc20, uint256 price) public isOwner(tokenId)  {
-        require(webmaTokenContract.getApproved(tokenId) == address(this), "the token is not approved.");
+        require(webmaTokenContract.getApproved(tokenId) == address(this), "token is not approved.");
         Swap memory newSwap = Swap(msg.sender, tokenId, erc20, price, false);
         swaps[tokenId] = newSwap;
         emit Open(tokenId, erc20,  price);
@@ -50,13 +50,13 @@ contract WebmaSwap is ReentrancyGuard {
         emit Close(tokenId);
     }
 
-    function fulfill(uint256 tokenId, address newOwner) public nonReentrant(){
-        require(isOwnerDifferent(tokenId, swaps[tokenId].owner), "the token is already transfered");
+    function fulfill(uint256 tokenId) public nonReentrant(){
+        require(isOwnerDifferent(tokenId, swaps[tokenId].owner), "token is already transfered");
         Swap memory swap = swaps[tokenId];
-        webmaTokenContract.transferFrom(swap.owner, newOwner, tokenId);
-        IERC20(swap.erc20).transfer(swap.owner, swap.price);
+        webmaTokenContract.transferFrom(swap.owner, msg.sender, tokenId);
+        IERC20(swap.erc20).transferFrom(msg.sender, swap.owner, swap.price);
         delete swaps[tokenId];
-        emit Fulfill(tokenId, swap.erc20, swap.price, newOwner);
+        emit Fulfill(tokenId, swap.erc20, swap.price, msg.sender);
     }
 }
 
