@@ -20,22 +20,18 @@ function Profile() {
   return <button onClick={() => connect()}>Connect Wallet</button>
 }
 
-const approveNft = (address: string, tokenId: number) => {
-    useApproveNFT(address, tokenId)
-}
-
 const Setting: NextPage = () => {
+    const { write } = useApproveNFT('0xB13484B5bE91362Cec0B76e1C35A48bb65C606a6', 0)
+
     return (
         <>
-        <div>{Profile()}</div>
-             <button
-                 onClick={() =>
-                     approveNft(
-                         '0xB13484B5bE91362Cec0B76e1C35A48bb65C606a6', 0
-                     )
-                 }>
-                approve nft
-            </button>
+        {Profile()}
+        <button
+            disabled={!write}
+            onClick={() => write?.()
+            }>
+            approve nft
+        </button>
         </>
     )
   };
