@@ -1,7 +1,9 @@
-import type { NextPage } from "next";
+import type { NextPage } from "next"
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { useApproveNFT } from '../hooks/useApproveNFT'
+import { useApproveERC721 } from '../hooks/useApproveERC721'
+import { useApproveERC20 } from '../hooks/useApproveERC20'
+import { utils } from 'ethers'
  
 function Profile() {
   const { address, isConnected } = useAccount()
@@ -21,17 +23,25 @@ function Profile() {
 }
 
 const Setting: NextPage = () => {
-    const { write } = useApproveNFT('0xB13484B5bE91362Cec0B76e1C35A48bb65C606a6', 0)
+    const { write: erc721Write } = useApproveERC721('0x6064D1CF4a5dB4718bebeB8ad2132bd79BDD94F4', 0)
+    const { address } = useAccount()
+    const { write: erc20Write } = useApproveERC20(address, utils.parseUnits('100'))
 
     return (
         <>
-        {Profile()}
-        <button
-            disabled={!write}
-            onClick={() => write?.()
-            }>
-            approve nft
-        </button>
+            {Profile()}
+            <button
+                disabled={!erc721Write}
+                onClick={() => erc721Write?.()
+                }>
+                approve erc721
+            </button>
+            <button
+                disabled={!erc20Write}
+                onClick={() => erc20Write?.()
+                }>
+                approve erc20
+            </button>
         </>
     )
   };

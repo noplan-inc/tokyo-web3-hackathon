@@ -1,8 +1,7 @@
 import { useContractWrite, usePrepareContractWrite,  } from "wagmi";
 import { abi }  from "./abi/ERC721";
-import { BigNumber } from 'ethers'
 
-export const useApproveNFT = (address: any, tokenId: any) => {
+export const useApproveERC721 = (address: any, tokenId: any) => {
   const {config}  = usePrepareContractWrite({
     address: "0x9801cc0d4a49181523afb811ae1d5036170fe445",
     chainId: 5,
