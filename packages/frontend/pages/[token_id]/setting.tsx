@@ -30,6 +30,7 @@ const Page: NextPage = () => {
     setValue(inputValue);
   };
 
+  // TODO: styling
   // TODO: react-hook-form 入れる
   return (
     <Box p="12">
