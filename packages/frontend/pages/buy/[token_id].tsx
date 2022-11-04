@@ -72,6 +72,8 @@ const Page: NextPage = () => {
       <Button mt="24px" colorScheme="teal" size="lg" onClick={handleMakeOffer}>
         Make Offer
       </Button>
+      <Divider mt="24px" />
+      <footer>Copyright © 2022 LSAT App. All right reserved.</footer>
     </Box>
   );
 };

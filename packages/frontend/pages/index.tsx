@@ -67,6 +67,8 @@ export default function Home() {
           </Box>
         );
       })}
+      <Divider mt="24px" />
+      <footer>Copyright © 2022 LSAT App. All right reserved.</footer>
     </Box>
   );
 }
