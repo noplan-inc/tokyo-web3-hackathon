@@ -2,15 +2,14 @@ import type { NextPage } from "next";
 import {
   Heading,
   Button,
-  Flex,
   Box,
-  Spacer,
   Select,
   Input,
   FormLabel,
   Switch,
   Image,
   Textarea,
+  Divider,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
@@ -35,11 +34,13 @@ const Page: NextPage = () => {
   return (
     <Box p="12">
       <Header />
+      <Divider />
       <Link href="/">
         <Button>
           <ChevronLeftIcon w={6} h={6} />
         </Button>
       </Link>
+      <Divider />
 
       <Heading as="h2" size="xl" mt="24px">
         item for sale
@@ -78,7 +79,7 @@ const Page: NextPage = () => {
           <Heading as="h3" size="md" mt="12px">
             Preview
           </Heading>
-          <Box w="fit-content" border="4px solid #000" borderRadius="8px">
+          <Box w="fit-content" border="2px solid #000" borderRadius="8px">
             <Image
               src={imageUrl}
               fallbackSrc="https://via.placeholder.com/352x220.png"
