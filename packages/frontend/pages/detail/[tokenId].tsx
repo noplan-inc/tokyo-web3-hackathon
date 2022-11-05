@@ -1,19 +1,29 @@
 import type { NextPage } from "next";
 import { Heading, Button, Box, Image, Text, Divider } from "@chakra-ui/react";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { ArrowRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
 import Link from "next/link";
+import { Footer } from "../../components/Footer";
+import { useRouter } from "next/router";
 
 // _____________________________________________________________________________
 //
 const Page: NextPage = () => {
-  // TODO: mock
+  const router = useRouter();
+  const tokenId = router?.query.tokenId;
+
+  const handleLocation = (path: string) => {
+    window.open(`https://${path}`, "_blank");
+  };
+
+  // mock
   const imageUrl = "/img/mockImage.png";
+  // TODO: descriptionを正しくする。
   const description =
     "mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description";
-  const subDomainSiteName = "jhcoder.webma.site";
+  // TODO: subDomainSiteNameを正しくする。
+  const subDomainSite = "2an.co";
   const ownerAddress = "0x90D9306105aB6b58a8eccCc65ef38F725770B7c5";
-  const lastDateForSell = "Mon Nov 31 2022 18:15:50";
   const price = "8.88";
   const dollarPrice = "11,628";
 
@@ -46,6 +56,17 @@ const Page: NextPage = () => {
           />
         </Box>
       </Box>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        onClick={() => handleLocation(subDomainSite)}
+      >
+        <Text>See Site</Text>
+        <Button>
+          <ArrowRightIcon w={3} h={3} />
+        </Button>
+      </Box>
 
       <Box>
         <Heading as="h3" size="md" mt="12px">
@@ -59,20 +80,20 @@ const Page: NextPage = () => {
           Buy this Web on Ethereum
         </Heading>
         <Text fontSize="24px" mt="12px" fontWeight="extrabold">
-          {subDomainSiteName}
+          {subDomainSite}
         </Text>
         <Text color="#878787">Owner by {ownerAddress}</Text>
       </Box>
-      <Box>Sale ends {lastDateForSell}</Box>
+      <Text>Token Id</Text>
+      <Box color="#878787">{tokenId}</Box>
       <Text>Current price</Text>
-      <Box>{price} ETH</Box>
-      <Box>${dollarPrice}</Box>
+      <Box color="#878787">{price} ETH</Box>
+      <Box color="#878787">${dollarPrice}</Box>
 
       <Button mt="24px" colorScheme="teal" size="lg" onClick={handleMakeOffer}>
         Make Offer
       </Button>
-      <Divider mt="24px" />
-      <footer>Copyright © 2022 LSAT App. All right reserved.</footer>
+      <Footer />
     </Box>
   );
 };

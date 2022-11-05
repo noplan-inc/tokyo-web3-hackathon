@@ -8,7 +8,7 @@ export const Header: React.FC<Props> = () => {
     <Flex minWidth="max-content" alignItems="center" gap="2">
       <Box p="2">
         <Heading as="h1" size="2xl">
-          LSAT App⚡️
+          webma ⚡️
         </Heading>
       </Box>
       <Spacer />

@@ -2,24 +2,20 @@ import { Header } from "../components/Header";
 import Link from "next/link";
 import { Button, Box, Image, Divider, Heading, Text } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { Footer } from "../components/Footer";
 
 export default function Home() {
   // TODO: mock
   const itemList: {
+    tokenId: string;
     subDomainSiteName: string;
-    href: any;
     imageUrl: string;
     description: string;
   }[] = [
     {
+      tokenId:
+        "25904909721345378695781540710917280912424441640456853830352847664990490981234",
       subDomainSiteName: "111111111.webma.site",
-      href: "/",
-      imageUrl: "",
-      description: "descriptiondescriptiondescription",
-    },
-    {
-      subDomainSiteName: "2222222222.webma.site",
-      href: "/",
       imageUrl: "",
       description: "descriptiondescriptiondescription",
     },
@@ -54,7 +50,7 @@ export default function Home() {
             <Text fontSize="24px" mt="12px" fontWeight="extrabold">
               {item.subDomainSiteName}
             </Text>
-            <Link href={item.href}>
+            <Link href={`/detail/${item.tokenId}`}>
               <Image
                 src={item.imageUrl}
                 fallbackSrc="https://via.placeholder.com/352x220.png"
@@ -67,8 +63,7 @@ export default function Home() {
           </Box>
         );
       })}
-      <Divider mt="24px" />
-      <footer>Copyright © 2022 LSAT App. All right reserved.</footer>
+      <Footer />
     </Box>
   );
 }
