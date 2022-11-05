@@ -9,7 +9,18 @@ import useSWR from "swr"
 import { Lsat } from "lsat-js"
 
 const fetcher = async (...path) => {
-  const res = await fetch(`${path}.json`)
+  const endpoint = process.env.NEXT_PUBLIC_SECRET_API_ENDPOINT
+  console.log(endpoint)
+  const p = `${endpoint}${path}.json`
+  console.warn(`p: ${p}`)
+  const host = process.env.NEXT_PUBLIC_SECRET_API_HOST
+  console.warn(`host: ${host}`)
+  const res = await fetch(p, {
+    headers: {
+      host: host,
+      fuga: "fugafuga",
+    },
+  })
   let data = ""
   if (res.status === 402) {
     const header = res.headers.get("www-authenticate")
