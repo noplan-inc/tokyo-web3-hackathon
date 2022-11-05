@@ -2,28 +2,33 @@
 
 # bashのスイッチ
 set -euC
-WORK_DIR="/Users/serinuntius/src/github.com/noplan-inc/tokyo-web3-hackathon/docker/nginx/public";
+WORK_DIR="../../docker/nginx/public";
 
 DOMAIN=$1;
 
 cd $WORK_DIR;
 
-echo "mkdir $DOMAIN";
-mkdir $DOMAIN;
+if [ -d $DOMAIN ]; then
+    echo "$DOMAIN exists"
+else
+    echo "mkdir $DOMAIN";
+    mkdir $DOMAIN;
+fi
+
 
 echo "cd " $DOMAIN;
 cd $DOMAIN;
 
-echo "cp frontend";
-cp -r /Users/serinuntius/src/github.com/noplan-inc/tokyo-web3-hackathon/packages/frontend/ .
+echo "cp blog";
+cp -r ../../../../packages/blog/ .
 
 echo "yarn install...";
 yarn install;
-echo "yarn build...";
+echo "yarn deploy...";
 
-yarn build;
+yarn deploy;
 
 # public/secretを生成するためには２回するしかないんや・・・。すまんな
-yarn build;
+yarn deploy;
 
 echo "clone finish!!!"

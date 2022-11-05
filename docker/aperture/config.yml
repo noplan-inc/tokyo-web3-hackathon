@@ -62,13 +62,13 @@ services:
  - name: "service1"
 
    # The regular expression used to match the service host.
-   hostregexp: '^hoge.example.com:80$'
+   hostregexp: '^blog.example.com:80$'
 
    # The regular expression used to match the path of the URL.
    pathregexp: '/secret/.*$'
 
    # The host:port which the service can be reached at.
-   address: "nginx:80"
+   address: "blog:80"
 
    # The HTTP protocol that should be used to connect to the service. Valid
    # options include: http, https.
