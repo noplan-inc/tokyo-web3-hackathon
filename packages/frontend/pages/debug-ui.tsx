@@ -9,6 +9,7 @@ import {
   useFulfill,
 } from "../hooks/useContract";
 import { utils } from "ethers";
+import { Button } from "@chakra-ui/react";
 
 function Profile() {
   const { address, isConnected } = useAccount();
@@ -21,10 +22,10 @@ function Profile() {
     return (
       <div>
         Connected to {address}
-        <button onClick={() => disconnect()}>Disconnect</button>
+        <Button onClick={() => disconnect()}>Disconnect</Button>
       </div>
     );
-  return <button onClick={() => connect()}>Connect Wallet</button>;
+  return <Button onClick={() => connect()}>Connect Wallet</Button>;
 }
 
 const Setting: NextPage = () => {
@@ -48,21 +49,21 @@ const Setting: NextPage = () => {
   return (
     <>
       {Profile()}
-      <button disabled={!webmaTokenWrite} onClick={() => webmaTokenWrite?.()}>
+      <Button disabled={!webmaTokenWrite} onClick={() => webmaTokenWrite?.()}>
         approve webmaToken
-      </button>
-      <button disabled={!erc20Write} onClick={() => erc20Write?.()}>
+      </Button>
+      <Button disabled={!erc20Write} onClick={() => erc20Write?.()}>
         approve erc20
-      </button>
-      <button disabled={!openWrite} onClick={() => openWrite?.()}>
+      </Button>
+      <Button disabled={!openWrite} onClick={() => openWrite?.()}>
         open
-      </button>
-      <button disabled={!closeWrite} onClick={() => closeWrite?.()}>
+      </Button>
+      <Button disabled={!closeWrite} onClick={() => closeWrite?.()}>
         close
-      </button>
-      <button disabled={!fulfillWrite} onClick={() => fulfillWrite?.()}>
+      </Button>
+      <Button disabled={!fulfillWrite} onClick={() => fulfillWrite?.()}>
         fulfill
-      </button>
+      </Button>
     </>
   );
 };

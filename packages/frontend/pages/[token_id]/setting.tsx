@@ -19,7 +19,7 @@ import Link from "next/link";
 // _____________________________________________________________________________
 //
 const Page: NextPage = () => {
-  // TODO: mockなので正しくする
+  // TODO: mock
   const imageUrl = "/img/mockImage.png";
 
   const [value, setValue] = useState("");

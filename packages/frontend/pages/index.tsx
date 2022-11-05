@@ -4,7 +4,7 @@ import { Button, Box, Image, Divider, Heading, Text } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 export default function Home() {
-  // TODO: mockなので正しくする
+  // TODO: mock
   const itemList: {
     subDomainSiteName: string;
     href: any;

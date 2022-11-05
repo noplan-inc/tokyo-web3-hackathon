@@ -7,7 +7,7 @@ import Link from "next/link";
 // _____________________________________________________________________________
 //
 const Page: NextPage = () => {
-  // TODO: mock.あとで消す.
+  // TODO: mock
   const imageUrl = "/img/mockImage.png";
   const description =
     "mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description";
@@ -68,7 +68,6 @@ const Page: NextPage = () => {
       <Box>{price} ETH</Box>
       <Box>${dollarPrice}</Box>
 
-      {/* TODO: 最終確認Modal入れる */}
       <Button mt="24px" colorScheme="teal" size="lg" onClick={handleMakeOffer}>
         Make Offer
       </Button>
