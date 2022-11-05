@@ -20,7 +20,7 @@ echo "cd " $DOMAIN;
 cd $DOMAIN;
 
 echo "cp blog";
-cp -r ../../../../packages/blog/ .
+cp -r ../../../../packages/blog/. .
 
 echo "yarn install...";
 yarn install;
