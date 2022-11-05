@@ -18,28 +18,47 @@ const fetcher = async (...path) => {
   const res = await fetch(p, {
     headers: {
       host: host,
-      fuga: "fugafuga",
     },
   })
+  console.log(res.status)
   let data = ""
-  if (res.status === 402) {
-    const header = res.headers.get("www-authenticate")
-    const lsat = Lsat.fromHeader(header)
-    console.log(`lsat.invoice: ${lsat.invoice}`)
-    const preimage = prompt(
-      "watch invoice in dev console & please payinvoice & fill preimage"
-    )
-    lsat.setPreimage(preimage)
-    const res = await fetch(`${path}.json`, {
-      headers: {
-        Authorization: lsat.toToken(),
-      },
-    })
 
-    data = await res.json()
-  } else {
-    data = await res.json()
-  }
+  console.log(res.headers)
+  const header = res.headers.get("Www-Authenticate")
+  console.log(header)
+  const lsat = Lsat.fromHeader(header)
+  console.log(`lsat.invoice: ${lsat.invoice}`)
+  const preimage = prompt(
+    "watch invoice in dev console & please payinvoice & fill preimage"
+  )
+  lsat.setPreimage(preimage)
+  const res2 = await fetch(`${path}.json`, {
+    headers: {
+      Authorization: lsat.toToken(),
+    },
+  })
+
+  data = await res2.json()
+  // if (res.status === 402) {
+  //   console.log(res.headers)
+  //   const header = res.headers.get("Www-Authenticate")
+  //   console.log(header)
+  //   const lsat = Lsat.fromHeader(header)
+  //   console.log(`lsat.invoice: ${lsat.invoice}`)
+  //   const preimage = prompt(
+  //     "watch invoice in dev console & please payinvoice & fill preimage"
+  //   )
+  //   lsat.setPreimage(preimage)
+  //   const res = await fetch(`${path}.json`, {
+  //     headers: {
+  //       Authorization: lsat.toToken(),
+  //     },
+  //   })
+
+  //   data = await res.json()
+  // } else {
+  //   data = await res.json()
+  // }
 
   return {
     data: data.attributes.content,
