@@ -28,14 +28,14 @@ contract WebmaTokenTest is Test {
 
     function testMint(uint256 tokenId) public {
         vm.prank(admin);
-        webmaToken.mint(admin, tokenId);
+        webmaToken.mint(admin);
         assertEq(webmaToken.ownerOf(tokenId), admin);
         assertEq(webmaToken.balanceOf(admin), 1);
     }
 
     function testTransfer(uint256 tokenId) public {
         vm.startPrank(admin);
-        webmaToken.mint(admin, tokenId);
+        webmaToken.mint(admin);
         webmaToken.approve(user, tokenId);
         webmaToken.transferFrom(admin, user, tokenId);
         vm.stopPrank();
