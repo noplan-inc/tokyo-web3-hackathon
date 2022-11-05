@@ -83,8 +83,8 @@ services:
   nginx:
     build:
       context: nginx
-    container_name: nginx
-    hostname: nginx
+    container_name: blog
+    hostname: blog
     ports:
       - 80:80
     volumes:
