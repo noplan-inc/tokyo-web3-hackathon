@@ -31,9 +31,9 @@ const Page: NextPage = () => {
   );
 
   const { write: openWrite } = useOpen(
-    tokenId,
-    address,
-    utils.parseUnits(price),
+    2,
+    "0x6064D1CF4a5dB4718bebeB8ad2132bd79BDD94F4",
+    utils.parseUnits("10"),
     isSuccess
   );
 

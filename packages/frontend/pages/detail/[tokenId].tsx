@@ -28,14 +28,14 @@ const Page: NextPage = () => {
 
 
   const { address } = useAccount();
-  const { data } = useGetSwap(0);
+  const { data } = useGetSwap(2);
   if (!data) return;
   const { write: erc20Write, isSuccess } = useApproveERC20(
     address,
     data[0].erc20,
     data[0].price
   );
-  const { write: fulfillWrite } = useFulfill(0, isSuccess);
+  const { write: fulfillWrite } = useFulfill(2, isSuccess);
 
   const handleLocation = (path: string) => {
     window.open(`https://${path}`, "_blank");
@@ -140,7 +140,7 @@ const Page: NextPage = () => {
       </Button>
 
       <Button mt="24px" colorScheme="teal" size="lg" onClick={handleMakeOffer}>
-        Make Offer
+        buy
       </Button>
       <Footer />
     </Box>
