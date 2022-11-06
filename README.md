@@ -10,7 +10,11 @@ https://blog.2an.co/
 
 ## 概要
 
-広告によって収益を生み出している従来のようなブログサイトではなく、読者がブログページへ訪れるためには支払いが必要になるような仕組みが構築されたブログ運営ができる。
+### **Pay-As-You-View**
+
+広告によって収益を生み出している従来のようなブログサイトではなく、読者がブログページへ訪れるためにLNによる支払いが必要になるような仕組みが構築されたブログ運営ができる。
+
+### **WebサイトのM&A**
 
 また、ブログ運営者は上記のLNによる収益に加えて、ブログとその運営権をNFTにして売買できる。ブログというコンテンツのみでなく、Webサイトであれば何でもNFTにできるので、今後NFTマーケット上でWebサイトの売買ができ、**WebサイトのM&A**が可能になる。
 
@@ -22,6 +26,8 @@ https://blog.2an.co/
 - ライター(ブログ運営者):　ユーザーがブログページを訪れるごとに収益を得る。ブログの運営権NFTの価格設定と売却が可能。
 
 ### 仕組み
+
+*Aperture*
 
 <a href="https://docs.lightning.engineering/the-lightning-network/lsat/aperture">Aperture</a>というプロキシをブログサーバーへ通信する前に設定。HTTPリクエストヘッダー内に、認証トークン(<a hre="https://docs.lightning.engineering/the-lightning-network/lsat/lsat">LSAT</a>)がなければHTTP ステータス402のレスポンス(payment required)をinvoice(LNによる請求書)返す。
 レスポンスに含まれるinvoiceへの支払いをLNで行うと、preimageというレシートがもらえるので、それをブログのヘッダーにセットして通信すれば、Apertureが認証してくれてブログが見れるようになるという仕組み。
@@ -51,8 +57,15 @@ https://blog.2an.co/
 - NFTが売買されたときに、オーナーが変わったことをStrapiに知らせる(未実装)
 
 
-### contracts
-- ブログの運営権NFTのcontract(Ethereumテストネット)
+### contracts(Goerliテストネット)
+
+- WebmaToken contract
+
+    - ブログ・運営権NFT
+
+- WebmaSwap contract
+
+    - 上記のブログNFTを売買するためのマーケット
 
 ## 詳細情報
 
