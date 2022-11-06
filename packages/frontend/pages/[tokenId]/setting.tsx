@@ -25,24 +25,41 @@ const Page: NextPage = () => {
   // TODO: mock
   const imageUrl = "/img/mockImage.png";
 
-  const [value, setValue] = useState("");
+  const [address, setAddress] = useState("");
+  const [tokenId, setTokenId] = useState("");
+  const [price, setPrice] = useState("0");
+
+  const {data} = useGetSwap(0)
+if(data){
+  console.log(utils.parseUnits(data[0].price.toString()))
+}
 
   const { write: webmaTokenWrite, isSuccess } = useApproveWebmaToken(
     process.env.NEXT_PUBLIC_WEBMA_SWAP_ADDRESS,
-    0
+    tokenId
   );
 
   const { write: openWrite } = useOpen(
-    0,
-    "0x651c063F89CE15756F75903b083df30A60FC56c1",
-    utils.parseUnits("100"),
+    tokenId,
+    address,
+    utils.parseUnits(price),
     isSuccess
   );
 
-  // const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-  //   const inputValue = e.target.value;
-  //   setValue(inputValue);
-  // };
+  const handleChangeAddress = (e: any) => {
+    const inputValue = e.target.value;
+    setAddress(inputValue);
+  };
+
+  const handleChangeTokenId = (e: any) => {
+    const inputValue = e.target.value;
+    setTokenId(inputValue);
+  };
+
+  const handleChangePrice = (e: any) => {
+    const inputValue = e.target.value;
+    setPrice(inputValue);
+  };
 
   const handleApproveNFT = () => {
     webmaTokenWrite?.();
@@ -77,6 +94,10 @@ const Page: NextPage = () => {
           <FormLabel htmlFor="isChecked">Publish:</FormLabel>
           <Switch id="isChecked" />
         </Box>
+
+        <Input placeholder='address' onChange={handleChangeAddress} />
+        <Input placeholder='token id' onChange={handleChangeTokenId} />
+        <Input placeholder='price' onChange={handleChangePrice} />
 
         <Button
           colorScheme="teal"
