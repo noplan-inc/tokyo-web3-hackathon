@@ -61,11 +61,11 @@ https://blog.2an.co/
 
 - WebmaToken contract
 
-    - ブログ・運営権NFT
+    - ブログ・運営権NFT(https://goerli.etherscan.io/address/0x6e7b4e167987b2faef3e1625fed3f5bd3ef0597f)
 
 - WebmaSwap contract
 
-    - 上記のブログNFTを売買するためのマーケット
+    - 上記のブログNFTを売買するためのマーケット(https://goerli.etherscan.io/address/0xc34fcb300380d2774228b44a43e6071c1622aa11)
 
 ## 詳細情報
 
