@@ -48,9 +48,9 @@ export default function Home() {
         Purchasable🙆‍♂️
       </Heading>
 
-      {itemList.map((item) => {
+      {itemList.map((item,i) => {
         return (
-          <Box w="fit-content" border="2px solid #000" borderRadius="8px">
+          <Box w="fit-content" border="2px solid #000" borderRadius="8px" key={i.toString()}>
             <Text fontSize="24px" mt="12px" fontWeight="extrabold">
               {item.subDomainSiteName}
             </Text>
