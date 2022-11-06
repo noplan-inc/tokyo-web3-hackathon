@@ -53,3 +53,9 @@ Ethereum, Bitcoin, Lightning Network
 
 ### 審査やテストのためにプロジェクトにアクセスする方法など
 
+
+## 動作検証するための準備
+
+httpsがローカルでも必要になるため、自己証明書で対応する
+localhostの場合のみ自己証明書でも許可するようにChromeのフラグをいじる
+chrome://flags/#allow-insecure-localhost
