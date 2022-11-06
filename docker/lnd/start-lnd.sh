@@ -67,10 +67,12 @@ exec lnd \
     "--$BACKEND.rpchost"="btcd" \
     "--$BACKEND.rpcuser"="$RPCUSER" \
     "--$BACKEND.rpcpass"="$RPCPASS" \
+    "--restlisten=0.0.0.0:8080" \
     "--rpclisten=$HOSTNAME:10009" \
     "--rpclisten=localhost:10009" \
     "--tlsextradomain=alice" \
-    "--tlsextraip=192.168.16.3" \
+    "--tlsextraip=192.168.16.3"
+    "--tlsextraip=172.18.0.4"
     "--adminmacaroonpath"="$ADMIN_MACAROON_PATH" \
     "--readonlymacaroonpath"="$READONLY_MACAROON_PATH" \
     "--invoicemacaroonpath"="$INVOICE_MACAROON_PATH" \
