@@ -111,6 +111,64 @@ Ethereum, Bitcoin, Lightning Network
 
 ### application codeやその他のfile
 
+#### LNで支払うとWebサイトがみれる仕組み
+```mermaid
+sequenceDiagram
+
+participant User as ユーザー
+participant A as Aperture
+
+participant LND
+
+participant N as Next.js
+
+
+
+User->> A: 閲覧したいです(SPAからのpre fetch)
+A->>User: 支払ってください(Invoiceが帰ってくる) 
+Note right of User: QRコードにして表示
+Note right of User: 支払う
+Note right of User: どうにかしてフロントで支払いを検知する
+Note right of User: pre imageを入手する
+User->> A: LSATをAuthHeaderに渡しながらSPAからfetch
+A->>N: コンテンツください
+N->>A: はいどうぞ
+A->>User: レスポンス
+
+```
+
+#### 記事を書く、編集、公開する仕組み
+```mermaid
+sequenceDiagram
+
+participant W as ライター
+participant S as Strapi
+participant N as Next.js
+
+W ->> S: 記事書きました
+S ->> N: buildしてSSGする（非同期でもおk）
+S ->> W: OK
+
+
+```
+
+#### ライター登録
+```mermaid
+sequenceDiagram
+
+participant W as ライター
+participant N as NFT Daemon
+
+W ->> N: authorのidと署名を渡す
+Note left of N: 署名をチェックする
+Note left of N: 本当の署名のアドレスがそのsubdomainのNFTを持っているかチェックする
+Note left of N: nextのclone
+N ->> W: OK
+
+
+```
+
+
 
 ### テスト手順を含むリポジトリへのリンク
 
