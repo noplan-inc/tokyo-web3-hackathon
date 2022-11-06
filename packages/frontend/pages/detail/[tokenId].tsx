@@ -19,16 +19,26 @@ import {
   useApproveERC20,
 } from "../../hooks/useContract";
 import { useAccount } from "wagmi";
+import { useState, useEffect } from "react";
+import { utils } from "ethers";
 
 // _____________________________________________________________________________
 //
 const Page: NextPage = () => {
   const router = useRouter();
   const tokenId = router?.query.tokenId;
-
-
   const { address } = useAccount();
   const { data } = useGetSwap(2);
+
+  const [price, setPrice] = useState<string>("");
+  useEffect(() => {
+    if (data) {
+      const result = utils.formatEther(data[0].price);
+
+      setPrice(result);
+    }
+  }, [data, tokenId]);
+
   if (!data) return;
   const { write: erc20Write, isSuccess } = useApproveERC20(
     address,
@@ -43,13 +53,12 @@ const Page: NextPage = () => {
 
   // mock
   const imageUrl = "/img/mockImage.png";
-  // TODO: descriptionを正しくする。
-  const description =
-    "mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description";
-  // TODO: subDomainSiteNameを正しくする。
+  const description = `LN(Lightning Network)を利用した新しい収益モデルによるブログ運営を可能にするアプリ
+  広告によって収益を生み出している従来のようなブログサイトではなく、
+  読者がブログページへ訪れるためには支払いが必要になるような仕組みが構築されたブログ運営アプリ。
+  また、ブログ運営者は上記のLNによる収益に加えて、運営権をNFTにして売却・購入することも可能。`;
   const subDomainSite = "blog.2an.co/";
   const ownerAddress = "0x90D9306105aB6b58a8eccCc65ef38F725770B7c5";
-  const price = "8.88";
 
   const handleApproveERC20 = () => {
     console.log(data[0].owner);
@@ -131,7 +140,7 @@ const Page: NextPage = () => {
       <Box color="#878787">{price} ETH</Box>
 
       <Button
-        mt="24px"
+        m="24px 0 60px 0"
         colorScheme="teal"
         size="lg"
         onClick={handleApproveERC20}
@@ -139,7 +148,12 @@ const Page: NextPage = () => {
         Approve ERC20
       </Button>
 
-      <Button mt="24px" colorScheme="teal" size="lg" onClick={handleMakeOffer}>
+      <Button
+        m="24px 0 60px 0"
+        colorScheme="teal"
+        size="lg"
+        onClick={handleMakeOffer}
+      >
         buy
       </Button>
       <Footer />
