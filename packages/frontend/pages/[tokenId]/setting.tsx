@@ -15,6 +15,9 @@ import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
 import { ChangeEvent, useState } from "react";
 import Link from "next/link";
+import { useApproveWebmaToken, useOpen } from "../../hooks/useContract";
+import { utils } from "ethers";
+import React, { useCallback } from "react";
 
 // _____________________________________________________________________________
 //
@@ -24,9 +27,34 @@ const Page: NextPage = () => {
 
   const [value, setValue] = useState("");
 
-  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const inputValue = e.target.value;
-    setValue(inputValue);
+  const [OpenWrite, setOpenWrite] = useState();
+
+  const { write: webmaTokenWrite, isSuccess } = useApproveWebmaToken(
+    "0x651c063F89CE15756F75903b083df30A60FC56c1",
+    0
+  );
+
+  const { write: openWrite } = useOpen(
+    0,
+    "0x651c063F89CE15756F75903b083df30A60FC56c1",
+    utils.parseUnits("100")
+  );
+
+  console.log("aaaaaaaaaaaaaaaaaa");
+  console.log(isSuccess);
+
+  // const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  //   const inputValue = e.target.value;
+  //   setValue(inputValue);
+  // };
+
+  const handleApproveNFT = () => {
+    webmaTokenWrite?.();
+  };
+
+  const handleCompleted = () => {
+    console.log(openWrite)
+    openWrite?.();
   };
 
   // TODO: styling
@@ -55,7 +83,22 @@ const Page: NextPage = () => {
           <Switch id="isChecked" />
         </Box>
 
-        <Button colorScheme="teal" size="lg" mt="24px">
+        <Button
+          colorScheme="teal"
+          size="lg"
+          mt="24px"
+          onClick={() => handleApproveNFT()}
+        >
+          Approve NFT
+        </Button>
+
+        <Button
+          colorScheme="teal"
+          size="lg"
+          mt="24px"
+          disabled={!isSuccess}
+          onClick={() => handleCompleted()}
+        >
           Completed
         </Button>
       </form>

@@ -5,12 +5,14 @@ import { Header } from "../../components/Header";
 import Link from "next/link";
 import { Footer } from "../../components/Footer";
 import { useRouter } from "next/router";
+import { useFulfill } from "../../hooks/useContract"
 
 // _____________________________________________________________________________
 //
 const Page: NextPage = () => {
   const router = useRouter();
   const tokenId = router?.query.tokenId;
+  const { write: fulfillWrite } = useFulfill(0);
 
   const handleLocation = (path: string) => {
     window.open(`https://${path}`, "_blank");
@@ -29,6 +31,8 @@ const Page: NextPage = () => {
 
   // TODO
   const handleMakeOffer = () => {
+    if(!fulfillWrite) return;
+    fulfillWrite(0)
     console.log("make offer");
   };
 
