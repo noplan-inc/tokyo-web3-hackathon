@@ -53,6 +53,8 @@ services:
       - shared:/rpc
       - lnd_bob:/root/.lnd
     entrypoint: [ "./start-lnd.sh" ]
+    ports:
+      - 8282:8080
     depends_on:
       - btcd
 
@@ -86,7 +88,7 @@ services:
     container_name: blog
     hostname: blog
     ports:
-      - 80:80
+      - 8888:80
     volumes:
       - ./nginx/public:/usr/share/nginx/html
       - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
