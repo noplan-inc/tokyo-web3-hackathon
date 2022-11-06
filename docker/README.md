@@ -13,15 +13,15 @@ $ docker exec -it alice bash
 # alice terminal
 bash-5.1#  lncli --network=simnet newaddress np2wkh
 {
-    "address": "rrA7WpcqxyyMJJF3oXgCcnBp6imDRJ8MgR"
+    "address": "rgtRCmcNPZmQJxhBphBvb5kG7MEr4rAtfD"
 }
 
 
 # host terminal
-MINING_ADDRESS=rnQKB9gW1EuSXAJwVi9VxU1jwyyATNftVi docker compose up -d btcd
+sudo MINING_ADDRESS=rgtRCmcNPZmQJxhBphBvb5kG7MEr4rAtfD docker compose up -d btcd
 
 
-docker exec -it btcd /start-btcctl.sh generate 400
+sudo docker exec -it btcd /start-btcctl.sh generate 400
 
 
 # alice terminal
@@ -29,30 +29,30 @@ $ lncli --network=simnet walletbalance
 
 
 # host terminal
-docker compose run -d --rm --name bob lnd_bob 
+sudo docker compose run -d --rm --name bob --service-ports lnd_bob 
 
 docker exec -it bob bash
 
 # bob terminal
 bash-5.1# lncli --network=simnet getinfo |grep identity
-    "identity_pubkey": "03811dc395104032aa71a3f795a85ddea1486b2165682fdead92f505f07ee58976",
+    "identity_pubkey": "03f61ce6b7ee68c720428a82ad0b309517d05edf5352946824bbf2a3df39917eef",
     
     
 # host terminal
-$ docker inspect bob | grep IPAddress
+$ sudo docker inspect bob | grep IPAddress
             "SecondaryIPAddresses": null,
             "IPAddress": "",
                     "IPAddress": "172.19.0.4",
 
 # alice terminal
-$ lncli --network=simnet connect 03811dc395104032aa71a3f795a85ddea1486b2165682fdead92f505f07ee58976@172.18.0.5
+$ lncli --network=simnet connect 03f61ce6b7ee68c720428a82ad0b309517d05edf5352946824bbf2a3df39917eef@172.20.0.4
 
-$ lncli --network=simnet openchannel --node_key=03811dc395104032aa71a3f795a85ddea1486b2165682fdead92f505f07ee58976 --local_amt=1000000
+$ lncli --network=simnet openchannel --node_key=03f61ce6b7ee68c720428a82ad0b309517d05edf5352946824bbf2a3df39917eef --local_amt=1000000
 
 
 # host terminal 
-$ MINING_ADDRESS=roWTHF1CNdWRDVZREWaaHfRDBQhM4uP8iH docker-compose up -d btcd
-$ docker exec -it btcd /start-btcctl.sh generate 400
+$ sudo MINING_ADDRESS=roWTHF1CNdWRDVZREWaaHfRDBQhM4uP8iH docker compose up -d btcd
+$ sudo docker exec -it btcd /start-btcctl.sh generate 400
 
 
 # bob terminal
@@ -66,7 +66,7 @@ bash-5.1# lncli --network=simnet addinvoice --amt=10000
 
 
 # alice terminal
-bash-5.1# lncli --network=simnet payinvoice --pay_req=lnsb100u1p3ktjz6pp5carvrrafklr5s5df6hy4fva56vgy6uwka9dkh8lvtjzn0xe7cfqqdqqcqzpgxqyz5vqsp52mfvyvgnkesv6767fqz8kpdlf37hxt28elag79z2x63sypnpyn5s9qyyssqnkadfl5xzmzw08y4n08mpfkeudcneew0euf2egpzmtz9qwlwx2ak7tsy9hvf3hex9xzjv4e86zcfc9fndqcxmm3mfvx66zhcassmlacp3czn60
+lncli --network=simnet payinvoice --pay_req=lnsb100u1p3k0qvlpp5lngmqtx5cs0666umtg35w3gzly6lxczdfeh0jeehng6a33uwnsjqdqqcqzpgxqyz5vqsp5zncumthvey6lnj0gtl6wu7fqs8cdjayj86frqslwjefamlkmtmfs9qyyssqlrruy0rm06876jfv0vnn7dsfzlcdh4daezzzwfl74r3na4rw7rqzhupw3z6m4kqm74f4n4mag96su53efz47yfghgmfmncgqgrztqlgp3sfg4m
 Payment hash: f1a1e5164c5a2ec66c71be20bbb0acaff95aa24bfca74d45b463839aaf1e7b2a
 
 
