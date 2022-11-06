@@ -2,6 +2,8 @@
 
 # Webma
 
+https://blog.2an.co/
+
 **ブログ運営・売買アプリ**
 
 *LN(Lightning Network)を利用した新しい収益モデルによるブログ運営を可能にするアプリ*
@@ -21,9 +23,8 @@
 
 ### 仕組み
 
-<a href="https://docs.lightning.engineering/the-lightning-network/lsat/aperture">Aperture</a>というプロキシを利用し、ブログサーバーへの通信をする前に、HTTPリクエストヘッダー内に、認証トークン(<a hre="https://docs.lightning.engineering/the-lightning-network/lsat/lsat">LSAT</a>)がなければHTTP ステータス402のレスポンス(payment required)をinvoice(LNによる請求書)返す。
-
-レスポンスに含まれるinvoiceへの支払いをLNを利用して行うと、preimageというレシートがもらえるので、それをブログのヘッダーにセットして通信すれば、Apertureが認証してくれてブログが見れるようになるという仕組み。
+<a href="https://docs.lightning.engineering/the-lightning-network/lsat/aperture">Aperture</a>というプロキシをブログサーバーへの通信をする前に立てる。HTTPリクエストヘッダー内に、認証トークン(<a hre="https://docs.lightning.engineering/the-lightning-network/lsat/lsat">LSAT</a>)がなければHTTP ステータス402のレスポンス(payment required)をinvoice(LNによる請求書)返す。
+レスポンスに含まれるinvoiceへの支払いをLNで行うと、preimageというレシートがもらえるので、それをブログのヘッダーにセットして通信すれば、Apertureが認証してくれてブログが見れるようになるという仕組み。
 
 よってApertureが返すinvoiceへの支払いを行わなければ、ブログページへの通信もできない状態＝ブログ閲覧ができない。
 
@@ -31,18 +32,17 @@
 ## このリポジトリについて
 
 ### backend
-StrapiでCMS
+<a href="https://strapi.io/">Strapi</a>(headlessCMS)
 
 ### frontend
-blogのテンプレート。backend(strapi)からAPIで取得した記事を元にnextのSSGする
+- blogのテンプレート。backend(strapi)からAPIで取得した記事を元にnextのSSGする(実装済)
 
 ### nft-daemon
-- 記事のpublish時にnextのSSGをし直す
-- NFTが売買されたときに、オーナーが変わったことをStrapiに知らせる
+- NFTが売買されたときに、オーナーが変わったことをStrapiに知らせる(未実装)
 
 
 ### contracts
-サイトNFTとM&Aができるコントラクト
+- ブログの運営権NFTのcontract(Ethereumテストネット)
 
 ## 詳細情報
 
@@ -77,9 +77,6 @@ Ethereum, Bitcoin, Lightning Network
 
 
 ### テスト手順を含むリポジトリへのリンク
-
-アプリのURL
-https://blog.2an.co/
 
 
 ### 審査やテストのためにプロジェクトにアクセスする方法など
