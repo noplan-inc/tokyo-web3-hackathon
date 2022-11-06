@@ -29,11 +29,6 @@ const Page: NextPage = () => {
   const [tokenId, setTokenId] = useState("");
   const [price, setPrice] = useState("0");
 
-  const {data} = useGetSwap(0)
-if(data){
-  console.log(utils.parseUnits(data[0].price.toString()))
-}
-
   const { write: webmaTokenWrite, isSuccess } = useApproveWebmaToken(
     process.env.NEXT_PUBLIC_WEBMA_SWAP_ADDRESS,
     tokenId

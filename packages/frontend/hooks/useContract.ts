@@ -5,13 +5,13 @@ import { abi as webmaSwapAbi } from "./abi/WebmaSwap";
 import { useEffect, useState, } from 'react'
 import { BigNumber } from "ethers";
 
-export const useApproveERC20 = (address: any, amount: any) => {
+export const useApproveERC20 = (ownerAddress: any, erc20Address: any, amount: any) => {
   const { config } = usePrepareContractWrite({
-    address: process.env.NEXT_PUBLIC_ERC20_ADDRESS,
+    address: erc20Address,
     chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
     abi: erc20Abi,
     functionName: "approve",
-    args: [address, amount],
+    args: [ownerAddress, amount],
   });
   return useContractWrite(config);
 };
@@ -27,7 +27,7 @@ export const useApproveWebmaToken = (address: any, tokenId: any) => {
   return useContractWrite(config);
 };
 
-export const useOpen = (tokenId: any, erc20: any, price: any, enabled) => {
+export const useOpen = (tokenId: any, erc20: any, price: any, enabled: any) => {
   const debouncedTokenId = useDebounce(tokenId, 500)
   const debouncedErc20 = useDebounce(erc20, 500)
   const debouncedPrice = useDebounce(price, 500)
@@ -53,13 +53,15 @@ export const useClose = (tokenId: any) => {
   return useContractWrite(config);
 };
 
-export const useFulfill = (tokenId: any) => {
+export const useFulfill = (tokenId: any, enabled: any) => {
+  const debouncedTokenId = useDebounce(tokenId, 500)
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_WEBMA_SWAP_ADDRESS,
     chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
     abi: webmaSwapAbi,
     functionName: "fulfill",
-    args: [tokenId],
+    args: [debouncedTokenId],
+    enabled: enabled
   });
   return useContractWrite(config);
 };
