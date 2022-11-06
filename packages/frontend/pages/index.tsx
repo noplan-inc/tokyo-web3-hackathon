@@ -46,12 +46,18 @@ export default function Home() {
 
       {itemList.map((item) => {
         return (
-          <Box w="fit-content" border="2px solid #000" borderRadius="8px">
+          <Box
+            key={item.tokenId}
+            w="fit-content"
+            border="2px solid #000"
+            borderRadius="8px"
+          >
             <Text fontSize="24px" mt="12px" fontWeight="extrabold">
               {item.subDomainSiteName}
             </Text>
             <Link href={`/detail/${item.tokenId}`}>
               <Image
+                alt=""
                 src={item.imageUrl}
                 fallbackSrc="https://via.placeholder.com/352x220.png"
               />

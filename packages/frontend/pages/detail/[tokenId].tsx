@@ -22,7 +22,7 @@ const Page: NextPage = () => {
   const description =
     "mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description";
   // TODO: subDomainSiteNameを正しくする。
-  const subDomainSite = "2an.co";
+  const subDomainSite = "blog.2an.co/";
   const ownerAddress = "0x90D9306105aB6b58a8eccCc65ef38F725770B7c5";
   const price = "8.88";
   const dollarPrice = "11,628";
@@ -51,6 +51,7 @@ const Page: NextPage = () => {
         </Heading>
         <Box w="fit-content" border="2px solid #000" borderRadius="8px">
           <Image
+            alt=""
             src={imageUrl}
             fallbackSrc="https://via.placeholder.com/352x220.png"
           />
