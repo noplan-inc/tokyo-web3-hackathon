@@ -12,6 +12,9 @@ const Page: NextPage = () => {
   const router = useRouter();
   const tokenId = router?.query.tokenId;
 
+  const { data } = useGetSwap(0);
+  console.log("price::", data[0].price.parseEther);
+
   const handleLocation = (path: string) => {
     window.open(`https://${path}`, "_blank");
   };
