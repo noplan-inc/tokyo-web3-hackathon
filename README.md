@@ -47,18 +47,19 @@ https://blog.2an.co/
 
 ## このリポジトリについて
 
-### backend
+### `packages/backend`
 - <a href="https://strapi.io/">Strapi</a>(headlessCMS)
 
-### frontend
+### `packages/frontend`
 - blogのテンプレート。backend(strapi)からAPIで取得した記事を元にnextのSSGする(実装済)
 
-### nft-daemon
+### `packages/nft-daemon`
+- 記事が更新されたときに、nextのrebuildをする
 - NFTが売買されたときに、オーナーが変わったことをStrapiに知らせる(未実装)
 
 
-### contracts(Goerliテストネット)
-
+### `packages/contracts`
+- Goerliテストネット
 - WebmaToken contract
 
     - ブログ・運営権NFT(https://goerli.etherscan.io/address/0x6e7b4e167987b2faef3e1625fed3f5bd3ef0597f)
@@ -66,6 +67,11 @@ https://blog.2an.co/
 - WebmaSwap contract
 
     - 上記のブログNFTを売買するためのマーケット(https://goerli.etherscan.io/address/0xc34fcb300380d2774228b44a43e6071c1622aa11)
+
+
+### `packages/ln-pay-server`
+- 簡易的なテストネット用のウォレットを開発
+- 審査員の方でもlnのノードを立てることなくlnのpaymentが可能に
 
 ## 詳細情報
 
@@ -81,19 +87,26 @@ https://blog.2an.co/
 
 *Backend(nftdeamon)*
 - Rust
+- axum
+- sqlite
 
 
 *Smartcontract*
 - Solidity
 - Foundry
+- OpenZeppelin
 
 *Lightning Network*
 - aperture
+- lnd
+- btcd
 
 ### 使用したBlockchain
 Ethereum, Bitcoin, Lightning Network
 
 ### deployしたContract(ExplorerでOK）
+- ブログ・運営権NFT(https://goerli.etherscan.io/address/0x6e7b4e167987b2faef3e1625fed3f5bd3ef0597f)
+- 上記のブログNFTを売買するためのマーケット(https://goerli.etherscan.io/address/0xc34fcb300380d2774228b44a43e6071c1622aa11)
 
 
 ### application codeやその他のfile
@@ -104,9 +117,3 @@ Ethereum, Bitcoin, Lightning Network
 
 ### 審査やテストのためにプロジェクトにアクセスする方法など
 
-
-## 動作検証するための準備
-
-httpsがローカルでも必要になるため、自己証明書で対応する
-localhostの場合のみ自己証明書でも許可するようにChromeのフラグをいじる
-chrome://flags/#allow-insecure-localhost
