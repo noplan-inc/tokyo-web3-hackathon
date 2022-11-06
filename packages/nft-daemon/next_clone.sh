@@ -10,6 +10,12 @@ cd $WORK_DIR;
 
 if [ -d $DOMAIN ]; then
     echo "$DOMAIN exists"
+    echo "delete $DOMAIN dir"
+    rm -rf $DOMAIN
+
+    echo "mkdir $DOMAIN";
+    mkdir $DOMAIN;
+
 else
     echo "mkdir $DOMAIN";
     mkdir $DOMAIN;
@@ -20,7 +26,7 @@ echo "cd " $DOMAIN;
 cd $DOMAIN;
 
 echo "cp blog";
-cp -r ../../../../packages/blog/ .
+cp -r ../../../../packages/blog/. .
 
 echo "yarn install...";
 yarn install;
