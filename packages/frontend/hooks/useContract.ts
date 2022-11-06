@@ -1,7 +1,9 @@
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, usePrepareContractWrite, useContractReads } from "wagmi";
 import { abi as erc20Abi } from "./abi/ERC20";
 import { abi as WebmaTokenAbi } from "./abi/WebmaToken";
 import { abi as webmaSwapAbi } from "./abi/WebmaSwap";
+import { useEffect, useState, } from 'react'
+import { BigNumber } from "ethers";
 
 export const useApproveERC20 = (address: any, amount: any) => {
   const { config } = usePrepareContractWrite({
@@ -25,13 +27,17 @@ export const useApproveWebmaToken = (address: any, tokenId: any) => {
   return useContractWrite(config);
 };
 
-export const useOpen = (tokenId: any, erc20: any, price: any) => {
+export const useOpen = (tokenId: any, erc20: any, price: any, enabled) => {
+  const debouncedTokenId = useDebounce(tokenId, 500)
+  const debouncedErc20 = useDebounce(erc20, 500)
+  const debouncedPrice = useDebounce(price, 500)
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_WEBMA_SWAP_ADDRESS,
     chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
     abi: webmaSwapAbi,
     functionName: "open",
-    args: [tokenId, erc20, price],
+    args: [debouncedTokenId, debouncedErc20, debouncedPrice],
+    enabled: enabled
   });
   return useContractWrite(config);
 };
@@ -57,3 +63,30 @@ export const useFulfill = (tokenId: any) => {
   });
   return useContractWrite(config);
 };
+
+export const useGetSwap = (tokenId: number) => {
+  return useContractReads({
+    contracts: [
+      {
+        address: process.env.NEXT_PUBLIC_WEBMA_SWAP_ADDRESS,
+        abi: webmaSwapAbi,
+        functionName: "getSwap",
+        args: [BigNumber.from(tokenId)],
+      },
+    ],
+  });
+};
+
+function useDebounce<T>(value: T, delay?: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay || 500)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [value, delay])
+
+  return debouncedValue
+}

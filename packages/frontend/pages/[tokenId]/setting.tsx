@@ -15,9 +15,9 @@ import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
 import { ChangeEvent, useState } from "react";
 import Link from "next/link";
-import { useApproveWebmaToken, useOpen } from "../../hooks/useContract";
+import { useApproveWebmaToken, useOpen, useGetSwap } from "../../hooks/useContract";
 import { utils } from "ethers";
-import React, { useCallback } from "react";
+import React from "react";
 
 // _____________________________________________________________________________
 //
@@ -27,21 +27,17 @@ const Page: NextPage = () => {
 
   const [value, setValue] = useState("");
 
-  const [OpenWrite, setOpenWrite] = useState();
-
   const { write: webmaTokenWrite, isSuccess } = useApproveWebmaToken(
-    "0x651c063F89CE15756F75903b083df30A60FC56c1",
+    process.env.NEXT_PUBLIC_WEBMA_SWAP_ADDRESS,
     0
   );
 
   const { write: openWrite } = useOpen(
     0,
     "0x651c063F89CE15756F75903b083df30A60FC56c1",
-    utils.parseUnits("100")
+    utils.parseUnits("100"),
+    isSuccess
   );
-
-  console.log("aaaaaaaaaaaaaaaaaa");
-  console.log(isSuccess);
 
   // const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
   //   const inputValue = e.target.value;
@@ -53,7 +49,6 @@ const Page: NextPage = () => {
   };
 
   const handleCompleted = () => {
-    console.log(openWrite)
     openWrite?.();
   };
 
@@ -87,6 +82,7 @@ const Page: NextPage = () => {
           colorScheme="teal"
           size="lg"
           mt="24px"
+          disabled={!webmaTokenWrite}
           onClick={() => handleApproveNFT()}
         >
           Approve NFT
@@ -96,7 +92,7 @@ const Page: NextPage = () => {
           colorScheme="teal"
           size="lg"
           mt="24px"
-          disabled={!isSuccess}
+          disabled={!openWrite}
           onClick={() => handleCompleted()}
         >
           Completed
