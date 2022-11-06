@@ -23,10 +23,20 @@ https://blog.2an.co/
 
 ### 仕組み
 
-<a href="https://docs.lightning.engineering/the-lightning-network/lsat/aperture">Aperture</a>というプロキシをブログサーバーへの通信をする前に立てる。HTTPリクエストヘッダー内に、認証トークン(<a hre="https://docs.lightning.engineering/the-lightning-network/lsat/lsat">LSAT</a>)がなければHTTP ステータス402のレスポンス(payment required)をinvoice(LNによる請求書)返す。
+<a href="https://docs.lightning.engineering/the-lightning-network/lsat/aperture">Aperture</a>というプロキシをブログサーバーへ通信する前に設定。HTTPリクエストヘッダー内に、認証トークン(<a hre="https://docs.lightning.engineering/the-lightning-network/lsat/lsat">LSAT</a>)がなければHTTP ステータス402のレスポンス(payment required)をinvoice(LNによる請求書)返す。
 レスポンスに含まれるinvoiceへの支払いをLNで行うと、preimageというレシートがもらえるので、それをブログのヘッダーにセットして通信すれば、Apertureが認証してくれてブログが見れるようになるという仕組み。
 
 よってApertureが返すinvoiceへの支払いを行わなければ、ブログページへの通信もできない状態＝ブログ閲覧ができない。
+
+
+### 今後の展望(実装予定項目)
+
+
+- NFTのオーナーとLNによる支払い先アドレスの自動紐付け
+
+- EVM上ではなく、<a href="https://docs.lightning.engineering/the-lightning-network/taro">Taro</a>もしくは<a href="https://www.rgbfaq.com/what-is-rgb">RGB</a>を利用してBitcoinブロックチェーン上に運営権NFTを作成
+
+
 
 
 ## このリポジトリについて
