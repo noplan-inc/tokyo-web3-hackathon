@@ -97,3 +97,7 @@ app.get('/balance', async (_, res) => {
 
     res.json({ "ok": result })
 })
+
+app.get('/', async (_, res) => {
+    res.send('<html><ul><li><a href="/pay?invoice=">test wallet</a></li><li><a href="/balance">bab balance</a></li></ul></html>')
+})
