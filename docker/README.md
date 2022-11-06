@@ -18,7 +18,7 @@ bash-5.1#  lncli --network=simnet newaddress np2wkh
 
 
 # host terminal
-MINING_ADDRESS=roWTHF1CNdWRDVZREWaaHfRDBQhM4uP8iH docker-compose up -d btcd
+MINING_ADDRESS=rnQKB9gW1EuSXAJwVi9VxU1jwyyATNftVi docker compose up -d btcd
 
 
 docker exec -it btcd /start-btcctl.sh generate 400
@@ -35,7 +35,7 @@ docker exec -it bob bash
 
 # bob terminal
 bash-5.1# lncli --network=simnet getinfo |grep identity
-    "identity_pubkey": "020a28e18340fdc32553aca3f4f1e5d72900331ecfec8cb999cb29026a3f0aafb1",
+    "identity_pubkey": "03811dc395104032aa71a3f795a85ddea1486b2165682fdead92f505f07ee58976",
     
     
 # host terminal
@@ -45,9 +45,9 @@ $ docker inspect bob | grep IPAddress
                     "IPAddress": "172.19.0.4",
 
 # alice terminal
-$ lncli --network=simnet connect 020a28e18340fdc32553aca3f4f1e5d72900331ecfec8cb999cb29026a3f0aafb1@172.18.0.4
+$ lncli --network=simnet connect 03811dc395104032aa71a3f795a85ddea1486b2165682fdead92f505f07ee58976@172.18.0.5
 
-$ lncli --network=simnet openchannel --node_key=020a28e18340fdc32553aca3f4f1e5d72900331ecfec8cb999cb29026a3f0aafb1 --local_amt=1000000
+$ lncli --network=simnet openchannel --node_key=03811dc395104032aa71a3f795a85ddea1486b2165682fdead92f505f07ee58976 --local_amt=1000000
 
 
 # host terminal 

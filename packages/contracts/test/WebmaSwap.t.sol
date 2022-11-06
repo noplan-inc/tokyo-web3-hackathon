@@ -31,7 +31,7 @@ contract WebmaSwapTest is Test {
         webmaSwap = new WebmaSwap(address(webmaToken));
         uint size = 1;
         addresses = new address[](size);
-        webmaToken.mint(admin, 1);
+        webmaToken.mint(admin);
         vm.stopPrank();
         erc20Contract = new ERC20("test", "TST");
         erc20Address = address(erc20Contract);

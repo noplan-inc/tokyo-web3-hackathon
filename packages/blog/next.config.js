@@ -4,7 +4,7 @@
 const nextConfig = {
   images: {
     loader: "default",
-    domains: ["localhost"],
+    domains: ["strapi.2an.co"],
     unoptimized: true
   },
   trailingSlash: true,
