@@ -5,15 +5,26 @@ import { Header } from "../../components/Header";
 import Link from "next/link";
 import { Footer } from "../../components/Footer";
 import { useRouter } from "next/router";
+import { useGetSwap } from "../../hooks/useContract";
+import { ethers, utils } from "ethers";
+import { useEffect, useState } from "react";
 
 // _____________________________________________________________________________
 //
 const Page: NextPage = () => {
   const router = useRouter();
   const tokenId = router?.query.tokenId;
+  const [price, setPrice] = useState<string>("");
 
-  const { data } = useGetSwap(0);
-  console.log("price::", data[0].price.parseEther);
+  const { data } = useGetSwap(1);
+
+  useEffect(() => {
+    if (data) {
+      const result = utils.parseUnits(data[0].price.toString());
+      const formated = utils.formatUnits(result);
+      setPrice(formated.toString());
+    }
+  }, [data]);
 
   const handleLocation = (path: string) => {
     window.open(`https://${path}`, "_blank");
@@ -22,12 +33,14 @@ const Page: NextPage = () => {
   // mock
   const imageUrl = "/img/mockImage.png";
   // TODO: descriptionを正しくする。
-  const description =
-    "mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description mock description";
+  const description = `
+  LN(Lightning Network)を利用した新しい収益モデルによるブログ運営を可能にするアプリ
+  広告によって収益を生み出している従来のようなブログサイトではなく、
+  読者がブログページへ訪れるためには支払いが必要になるような仕組みが構築されたブログ運営アプリ。
+  また、ブログ運営者は上記のLNによる収益に加えて、運営権をNFTにして売却・購入することも可能。`;
   // TODO: subDomainSiteNameを正しくする。
   const subDomainSite = "blog.2an.co/";
   const ownerAddress = "0x90D9306105aB6b58a8eccCc65ef38F725770B7c5";
-  const price = "8.88";
 
   // TODO
   const handleMakeOffer = () => {
@@ -80,6 +93,7 @@ const Page: NextPage = () => {
         <Heading as="h3" size="lg" fontWeight="extrabold" mt="12px">
           Description
         </Heading>
+        <Text>ブログ運営・売買アプリ:　</Text>
         <Text>{description}</Text>
       </Box>
 
@@ -95,7 +109,7 @@ const Page: NextPage = () => {
       <Text>Token Id</Text>
       <Box color="#878787">{tokenId}</Box>
       <Text>Current price</Text>
-      <Box color="#878787">{price} ETH</Box>
+      <Box color="#878787">{price}</Box>
 
       <Button
         m="24px 0 60px"
