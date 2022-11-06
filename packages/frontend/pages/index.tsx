@@ -44,7 +44,7 @@ export default function Home() {
         Purchasable🙆‍♂️
       </Heading>
 
-      {itemList.map((item) => {
+      {itemList.map((item, i) => {
         return (
           <Box
             key={item.tokenId}
