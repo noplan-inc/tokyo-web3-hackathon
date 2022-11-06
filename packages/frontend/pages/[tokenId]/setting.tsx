@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
-import { ChangeEvent, useState } from "react";
 import Link from "next/link";
 
 // _____________________________________________________________________________
@@ -17,13 +16,6 @@ import Link from "next/link";
 const Page: NextPage = () => {
   // TODO: mock
   const imageUrl = "/img/mockImage.png";
-
-  const [value, setValue] = useState("");
-
-  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const inputValue = e.target.value;
-    setValue(inputValue);
-  };
 
   // TODO: styling
   // TODO: react-hook-form 入れる
