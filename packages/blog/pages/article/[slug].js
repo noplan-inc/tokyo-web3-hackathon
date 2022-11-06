@@ -7,67 +7,72 @@ import Seo from "../../components/seo"
 import { getStrapiMedia } from "../../lib/media"
 import useSWR from "swr"
 import { Lsat } from "lsat-js"
+import { useEffect, useState } from "react"
 
-const fetcher = async (...path) => {
-  const endpoint = process.env.NEXT_PUBLIC_SECRET_API_ENDPOINT
-  console.log(endpoint)
-  const p = `${endpoint}${path}.json`
-  console.warn(`p: ${p}`)
-  const host = process.env.NEXT_PUBLIC_SECRET_API_HOST
-  console.warn(`host: ${host}`)
-  const res = await fetch(p, {
-    headers: {
-      host: host,
-    },
-  })
-  console.log(res.status)
-  let data = ""
+const parseLSAT = (header) => {
+  const regex = /macaroon="(\S*)",\s*invoice="(\S*)"/gm
 
-  console.log(res.headers)
-  const header = res.headers.get("Www-Authenticate")
-  console.log(header)
-  const lsat = Lsat.fromHeader(header)
-  console.log(`lsat.invoice: ${lsat.invoice}`)
-  const preimage = prompt(
-    "watch invoice in dev console & please payinvoice & fill preimage"
-  )
-  lsat.setPreimage(preimage)
-  const res2 = await fetch(`${path}.json`, {
-    headers: {
-      Authorization: lsat.toToken(),
-    },
-  })
+  let m
 
-  data = await res2.json()
-  // if (res.status === 402) {
-  //   console.log(res.headers)
-  //   const header = res.headers.get("Www-Authenticate")
-  //   console.log(header)
-  //   const lsat = Lsat.fromHeader(header)
-  //   console.log(`lsat.invoice: ${lsat.invoice}`)
-  //   const preimage = prompt(
-  //     "watch invoice in dev console & please payinvoice & fill preimage"
-  //   )
-  //   lsat.setPreimage(preimage)
-  //   const res = await fetch(`${path}.json`, {
-  //     headers: {
-  //       Authorization: lsat.toToken(),
-  //     },
-  //   })
+  let macaroon, invoice
 
-  //   data = await res.json()
-  // } else {
-  //   data = await res.json()
-  // }
+  while ((m = regex.exec(header)) !== null) {
+    // This is necessary to avoid infinite loops with zero-width matches
+    if (m.index === regex.lastIndex) {
+      regex.lastIndex++
+    }
 
-  return {
-    data: data.attributes.content,
+    // The result can be accessed through the `m`-variable.
+
+    if (m.length !== 3) return
+
+    macaroon = m[1]
+    invoice = m[2]
   }
+
+  return [macaroon, invoice]
 }
 
 const Article = ({ article, categories }) => {
-  const { data, error } = useSWR(`/secret/${article.attributes.slug}`, fetcher)
+  const [content, setContent] = useState(null)
   const imageUrl = getStrapiMedia(article.attributes.image)
+
+  useEffect(() => {
+    ;(async () => {
+      const endpoint = process.env.NEXT_PUBLIC_SECRET_API_ENDPOINT
+
+      const path = `/secret/${article.attributes.slug}`
+      const url = `${endpoint}${path}.json`
+
+      console.warn(`request: ${url}`)
+      const res = await fetch(url)
+      console.log(res.status)
+      let data = ""
+
+      console.log(res.headers)
+      const header = res.headers.get("Www-Authenticate")
+      console.log(header)
+
+      const [macaroon, invoice] = parseLSAT(header)
+      console.log(`macaroon: ${macaroon}`)
+      console.log(`invoice: ${invoice}`)
+
+      const lsat = Lsat.fromMacaroon(macaroon)
+      const preimage = prompt(
+        "watch invoice in dev console & please payinvoice & fill preimage"
+      )
+      lsat.setPreimage(preimage)
+      const res2 = await fetch(url, {
+        headers: {
+          Authorization: lsat.toToken(),
+        },
+      })
+
+      const articles = await res2.json()
+
+      setContent(articles.attributes.content)
+    })()
+  }, [])
 
   const seo = {
     metaTitle: article.attributes.title,
@@ -90,8 +95,8 @@ const Article = ({ article, categories }) => {
       </div>
       <div className="uk-section">
         <div className="uk-container uk-container-small">
-          {data && (
-            <ReactMarkdown escapeHtml={false}>{data.data}</ReactMarkdown>
+          {content && (
+            <ReactMarkdown escapeHtml={false}>{content}</ReactMarkdown>
           )}
 
           <hr className="uk-divider-small" />
