@@ -53,6 +53,8 @@ services:
       - shared:/rpc
       - lnd_bob:/root/.lnd
     entrypoint: [ "./start-lnd.sh" ]
+    ports:
+      - 8282:8080
     depends_on:
       - btcd
 
