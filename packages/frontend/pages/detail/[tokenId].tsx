@@ -1,19 +1,11 @@
 import type { NextPage } from "next";
-import {
-  Heading,
-  Button,
-  Box,
-  Image,
-  Text,
-  Divider,
-  Input,
-} from "@chakra-ui/react";
+import { Heading, Button, Box, Image, Text, Divider } from "@chakra-ui/react";
 import { ArrowRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
 import Link from "next/link";
 import { Footer } from "../../components/Footer";
 import { useRouter } from "next/router";
-import { ethers, utils } from "ethers";
+import { utils } from "ethers";
 import { useEffect, useState } from "react";
 import {
   useFulfill,
@@ -29,15 +21,15 @@ const Page: NextPage = () => {
   const tokenId = router?.query.tokenId;
   const [price, setPrice] = useState<string>("");
   const { address } = useAccount();
-  const { data } = useGetSwap(0);
+  const { data } = useGetSwap(Number(tokenId));
 
   useEffect(() => {
     if (data) {
-      const result = utils.parseUnits(data[0].price.toString());
-      const formated = utils.formatUnits(result);
-      setPrice(formated.toString());
+      const result = utils.formatEther(data[0].price);
+
+      setPrice(result);
     }
-  }, [data]);
+  }, [data, tokenId]);
 
   const { write: erc20Write, isSuccess } = useApproveERC20(
     address,
@@ -45,21 +37,18 @@ const Page: NextPage = () => {
     data?.[0]?.price
   );
 
-  const { write: fulfillWrite } = useFulfill(0, isSuccess);
+  const { write: fulfillWrite } = useFulfill(tokenId, isSuccess);
 
   const handleLocation = (path: string) => {
     window.open(`https://${path}`, "_blank");
   };
 
-  // mock
   const imageUrl = "/img/mockImage.png";
-  // TODO: descriptionを正しくする。
   const description = `
   LN(Lightning Network)を利用した新しい収益モデルによるブログ運営を可能にするアプリ
   広告によって収益を生み出している従来のようなブログサイトではなく、
   読者がブログページへ訪れるためには支払いが必要になるような仕組みが構築されたブログ運営アプリ。
   また、ブログ運営者は上記のLNによる収益に加えて、運営権をNFTにして売却・購入することも可能。`;
-  // TODO: subDomainSiteNameを正しくする。
   const subDomainSite = "blog.2an.co/";
   const ownerAddress = "0x90D9306105aB6b58a8eccCc65ef38F725770B7c5";
 
@@ -72,14 +61,12 @@ const Page: NextPage = () => {
     console.log("approve erc20");
   };
 
-  // TODO
-  const handleMakeOffer = () => {
+  const handleBuy = () => {
+    console.log("fulfillWrite:", fulfillWrite);
     if (!fulfillWrite) return;
-    fulfillWrite(0 as any);
-    console.log("make offer");
+    fulfillWrite(tokenId as any);
   };
 
-  // TODO: styling
   return (
     <Box p="16px" minHeight="100vh" position="relative">
       <Header />
@@ -144,7 +131,7 @@ const Page: NextPage = () => {
       <Box color="#878787">{price}</Box>
 
       <Button
-        mt="24px"
+        m="24px 0 60px"
         colorScheme="teal"
         size="lg"
         onClick={handleApproveERC20}
@@ -152,8 +139,13 @@ const Page: NextPage = () => {
         Approve ERC20
       </Button>
 
-      <Button mt="24px" colorScheme="teal" size="lg" onClick={handleMakeOffer}>
-        Make Offer
+      <Button
+        m="24px 0 60px 16px"
+        colorScheme="teal"
+        size="lg"
+        onClick={handleBuy}
+      >
+        Buy
       </Button>
       <Footer />
     </Box>

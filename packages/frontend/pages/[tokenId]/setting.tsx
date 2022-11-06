@@ -6,21 +6,23 @@ import {
   FormLabel,
   Switch,
   Divider,
-  Input
+  Input,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
 import Link from "next/link";
-import { useApproveWebmaToken, useOpen, useGetSwap } from "../../hooks/useContract";
+import {
+  useApproveWebmaToken,
+  useOpen,
+  useGetSwap,
+} from "../../hooks/useContract";
 import { utils } from "ethers";
-import React, {useState} from "react";
+import React, { useState } from "react";
+import { Footer } from "../../components/Footer";
 
 // _____________________________________________________________________________
 //
 const Page: NextPage = () => {
-  // TODO: mock
-  const imageUrl = "/img/mockImage.png";
-
   const [address, setAddress] = useState("");
   const [tokenId, setTokenId] = useState("");
   const [price, setPrice] = useState("0");
@@ -60,8 +62,6 @@ const Page: NextPage = () => {
     openWrite?.();
   };
 
-  // TODO: styling
-  // TODO: react-hook-form 入れる
   return (
     <Box p="16px" minHeight="100vh" position="relative">
       <Header />
@@ -82,13 +82,19 @@ const Page: NextPage = () => {
           <Heading as="h3" size="md" mt="12px">
             Whether or not to sell
           </Heading>
-          <FormLabel htmlFor="isChecked">Publish:</FormLabel>
+          <FormLabel mt="16px" htmlFor="isChecked">
+            Publish:
+          </FormLabel>
           <Switch id="isChecked" />
         </Box>
 
-        <Input placeholder='address' onChange={handleChangeAddress} />
-        <Input placeholder='token id' onChange={handleChangeTokenId} />
-        <Input placeholder='price' onChange={handleChangePrice} />
+        <Input mt="16px" placeholder="address" onChange={handleChangeAddress} />
+        <Input
+          mt="16px"
+          placeholder="token id"
+          onChange={handleChangeTokenId}
+        />
+        <Input mt="16px" placeholder="price" onChange={handleChangePrice} />
 
         <Button
           colorScheme="teal"
@@ -103,15 +109,14 @@ const Page: NextPage = () => {
         <Button
           colorScheme="teal"
           size="lg"
-          mt="24px"
+          m="24px 0 0 16px"
           disabled={!openWrite}
           onClick={() => handleCompleted()}
         >
           Completed
         </Button>
       </form>
-      <Divider mt="24px" />
-      <footer>Copyright © 2022 LSAT App. All right reserved.</footer>
+      <Footer />
     </Box>
   );
 };
