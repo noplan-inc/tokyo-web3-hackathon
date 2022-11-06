@@ -1,7 +1,6 @@
 import { Header } from "../components/Header";
 import Link from "next/link";
-import { Button, Box, Image, Divider, Heading, Text } from "@chakra-ui/react";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { Box, Image, Divider, Heading, Text } from "@chakra-ui/react";
 import { Footer } from "../components/Footer";
 
 export default function Home() {
@@ -22,17 +21,11 @@ export default function Home() {
   ];
 
   return (
-    <Box p="12">
+    <Box p="16px" minHeight="100vh" position="relative">
       <Header />
       <Divider />
-      <Link href="/">
-        <Button>
-          <ChevronLeftIcon w={6} h={6} />
-        </Button>
-      </Link>
-      <Divider />
 
-      <Heading as="h2" mt="24px">
+      <Heading as="h2" mt="24px" textAlign="center">
         SITES YOU CAN SEE
         <br />
         WHEN YOU PAY
@@ -40,7 +33,13 @@ export default function Home() {
         WITH LIGHITING⚡️
       </Heading>
 
-      <Heading as="h3" mt="24px">
+      <Heading
+        as="h3"
+        size="lg"
+        fontWeight="extrabold"
+        mt="24px"
+        textAlign="center"
+      >
         Purchasable🙆‍♂️
       </Heading>
 
@@ -51,6 +50,7 @@ export default function Home() {
             w="fit-content"
             border="2px solid #000"
             borderRadius="8px"
+            margin="24px auto"
           >
             <Text fontSize="24px" mt="12px" fontWeight="extrabold">
               {item.subDomainSiteName}

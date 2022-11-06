@@ -3,12 +3,8 @@ import {
   Heading,
   Button,
   Box,
-  Select,
-  Input,
   FormLabel,
   Switch,
-  Image,
-  Textarea,
   Divider,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
@@ -32,7 +28,7 @@ const Page: NextPage = () => {
   // TODO: styling
   // TODO: react-hook-form 入れる
   return (
-    <Box p="12">
+    <Box p="16px" minHeight="100vh" position="relative">
       <Header />
       <Divider />
       <Link href="/">
