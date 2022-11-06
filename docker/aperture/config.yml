@@ -17,7 +17,7 @@ debuglevel: "trace"
 # Whether the proxy should create a valid certificate through Let's Encrypt for
 # the fully qualifying domain name.
 autocert: false
-servername: aperture.example.com
+servername: aperture.2an.co
 
 # The port on which the pprof profile will be served. If no port is provided,
 # the profile will not be served.
@@ -62,7 +62,7 @@ services:
  - name: "service1"
 
    # The regular expression used to match the service host.
-   hostregexp: '^blog.example.com:80$'
+   hostregexp: 'aperture.2an.co'
 
    # The regular expression used to match the path of the URL.
    pathregexp: '/secret/.*$'

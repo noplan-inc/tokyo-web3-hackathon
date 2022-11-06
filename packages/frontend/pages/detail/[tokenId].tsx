@@ -1,10 +1,24 @@
 import type { NextPage } from "next";
-import { Heading, Button, Box, Image, Text, Divider } from "@chakra-ui/react";
+import {
+  Heading,
+  Button,
+  Box,
+  Image,
+  Text,
+  Divider,
+  Input,
+} from "@chakra-ui/react";
 import { ArrowRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
 import Link from "next/link";
 import { Footer } from "../../components/Footer";
 import { useRouter } from "next/router";
+import {
+  useFulfill,
+  useGetSwap,
+  useApproveERC20,
+} from "../../hooks/useContract";
+import { useAccount } from "wagmi";
 
 // _____________________________________________________________________________
 //
@@ -12,8 +26,16 @@ const Page: NextPage = () => {
   const router = useRouter();
   const tokenId = router?.query.tokenId;
 
+
+  const { address } = useAccount();
   const { data } = useGetSwap(0);
-  console.log("price::", data[0].price.parseEther);
+  if (!data) return;
+  const { write: erc20Write, isSuccess } = useApproveERC20(
+    address,
+    data[0].erc20,
+    data[0].price
+  );
+  const { write: fulfillWrite } = useFulfill(0, isSuccess);
 
   const handleLocation = (path: string) => {
     window.open(`https://${path}`, "_blank");
@@ -29,8 +51,19 @@ const Page: NextPage = () => {
   const ownerAddress = "0x90D9306105aB6b58a8eccCc65ef38F725770B7c5";
   const price = "8.88";
 
+  const handleApproveERC20 = () => {
+    console.log(data[0].owner);
+    console.log(data[0].erc20);
+    console.log(data[0].price.toString());
+    if (!erc20Write) return;
+    erc20Write();
+    console.log("approve erc20");
+  };
+
   // TODO
   const handleMakeOffer = () => {
+    if (!fulfillWrite) return;
+    fulfillWrite(0);
     console.log("make offer");
   };
 
@@ -98,11 +131,15 @@ const Page: NextPage = () => {
       <Box color="#878787">{price} ETH</Box>
 
       <Button
-        m="24px 0 60px"
+        mt="24px"
         colorScheme="teal"
         size="lg"
-        onClick={handleMakeOffer}
+        onClick={handleApproveERC20}
       >
+        Approve ERC20
+      </Button>
+
+      <Button mt="24px" colorScheme="teal" size="lg" onClick={handleMakeOffer}>
         Make Offer
       </Button>
       <Footer />

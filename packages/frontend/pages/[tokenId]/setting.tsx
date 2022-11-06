@@ -6,16 +6,59 @@ import {
   FormLabel,
   Switch,
   Divider,
+  Input
 } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Header } from "../../components/Header";
 import Link from "next/link";
+import { useApproveWebmaToken, useOpen, useGetSwap } from "../../hooks/useContract";
+import { utils } from "ethers";
+import React, {useState} from "react";
 
 // _____________________________________________________________________________
 //
 const Page: NextPage = () => {
   // TODO: mock
   const imageUrl = "/img/mockImage.png";
+
+  const [address, setAddress] = useState("");
+  const [tokenId, setTokenId] = useState("");
+  const [price, setPrice] = useState("0");
+
+  const { write: webmaTokenWrite, isSuccess } = useApproveWebmaToken(
+    process.env.NEXT_PUBLIC_WEBMA_SWAP_ADDRESS,
+    tokenId
+  );
+
+  const { write: openWrite } = useOpen(
+    tokenId,
+    address,
+    utils.parseUnits(price),
+    isSuccess
+  );
+
+  const handleChangeAddress = (e: any) => {
+    const inputValue = e.target.value;
+    setAddress(inputValue);
+  };
+
+  const handleChangeTokenId = (e: any) => {
+    const inputValue = e.target.value;
+    setTokenId(inputValue);
+  };
+
+  const handleChangePrice = (e: any) => {
+    const inputValue = e.target.value;
+    setPrice(inputValue);
+  };
+
+  const handleApproveNFT = () => {
+    webmaTokenWrite?.();
+  };
+
+  const handleCompleted = () => {
+    openWrite?.();
+  };
 
   // TODO: styling
   // TODO: react-hook-form 入れる
@@ -43,7 +86,27 @@ const Page: NextPage = () => {
           <Switch id="isChecked" />
         </Box>
 
-        <Button colorScheme="teal" size="lg" mt="24px">
+        <Input placeholder='address' onChange={handleChangeAddress} />
+        <Input placeholder='token id' onChange={handleChangeTokenId} />
+        <Input placeholder='price' onChange={handleChangePrice} />
+
+        <Button
+          colorScheme="teal"
+          size="lg"
+          mt="24px"
+          disabled={!webmaTokenWrite}
+          onClick={() => handleApproveNFT()}
+        >
+          Approve NFT
+        </Button>
+
+        <Button
+          colorScheme="teal"
+          size="lg"
+          mt="24px"
+          disabled={!openWrite}
+          onClick={() => handleCompleted()}
+        >
           Completed
         </Button>
       </form>

@@ -5,7 +5,6 @@
     "packages": [
       "packages/backend",
       "packages/frontend",
-      "packages/blog",
       "packages/lsta-js"
     ]
   },
