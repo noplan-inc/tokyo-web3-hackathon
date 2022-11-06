@@ -26,6 +26,7 @@ const Page: NextPage = () => {
   const router = useRouter();
   const tokenId = router?.query.tokenId;
 
+
   const { address } = useAccount();
   const { data } = useGetSwap(0);
   if (!data) return;
@@ -49,7 +50,6 @@ const Page: NextPage = () => {
   const subDomainSite = "blog.2an.co/";
   const ownerAddress = "0x90D9306105aB6b58a8eccCc65ef38F725770B7c5";
   const price = "8.88";
-  const dollarPrice = "11,628";
 
   const handleApproveERC20 = () => {
     console.log(data[0].owner);
@@ -69,7 +69,7 @@ const Page: NextPage = () => {
 
   // TODO: styling
   return (
-    <Box p="12">
+    <Box p="16px" minHeight="100vh" position="relative">
       <Header />
       <Divider />
       <Link href="/">
@@ -81,10 +81,15 @@ const Page: NextPage = () => {
 
       {/* contents */}
       <Box>
-        <Heading as="h3" size="md" mt="12px">
+        <Heading as="h3" size="lg" fontWeight="extrabold" mt="12px">
           Preview
         </Heading>
-        <Box w="fit-content" border="2px solid #000" borderRadius="8px">
+        <Box
+          mt="12px"
+          w="fit-content"
+          border="2px solid #000"
+          borderRadius="8px"
+        >
           <Image
             alt=""
             src={imageUrl}
@@ -92,31 +97,31 @@ const Page: NextPage = () => {
           />
         </Box>
       </Box>
-      <Box
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
-        onClick={() => handleLocation(subDomainSite)}
-      >
-        <Text>See Site</Text>
-        <Button>
+      <Button mt="12px">
+        <Box
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          onClick={() => handleLocation(subDomainSite)}
+        >
+          <Text>　See Site　</Text>
           <ArrowRightIcon w={3} h={3} />
-        </Button>
-      </Box>
+        </Box>
+      </Button>
 
       <Box>
-        <Heading as="h3" size="md" mt="12px">
+        <Heading as="h3" size="lg" fontWeight="extrabold" mt="12px">
           Description
         </Heading>
         <Text>{description}</Text>
       </Box>
 
-      <Box>
-        <Heading as="h3" size="md" mt="12px">
+      <Box mt="12px">
+        <Heading as="h3" size="lg" fontWeight="extrabold" mt="12px">
           Buy this Web on Ethereum
         </Heading>
         <Text fontSize="24px" mt="12px" fontWeight="extrabold">
-          {subDomainSite}
+          Web: {subDomainSite}
         </Text>
         <Text color="#878787">Owner by {ownerAddress}</Text>
       </Box>
@@ -124,7 +129,6 @@ const Page: NextPage = () => {
       <Box color="#878787">{tokenId}</Box>
       <Text>Current price</Text>
       <Box color="#878787">{price} ETH</Box>
-      <Box color="#878787">${dollarPrice}</Box>
 
       <Button
         mt="24px"
