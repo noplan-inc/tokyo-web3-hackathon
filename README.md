@@ -6,13 +6,14 @@ https://blog.2an.co/
 
 **ブログ運営・売買アプリ**
 
-*LN(Lightning Network)を利用した新しい収益モデルによるブログ運営を可能にするアプリ*
+*LN(Lightning Network)を利用した新しい収益モデルによるブログ運営・Webサイト自体のM&Aを可能にするアプリ*
 
 ## 概要
 
 広告によって収益を生み出している従来のようなブログサイトではなく、読者がブログページへ訪れるためには支払いが必要になるような仕組みが構築されたブログ運営アプリ。
 
-また、ブログ運営者は上記のLNによる収益に加えて、運営権をNFTにして売却・購入することも可能。
+また、ブログ運営者は上記のLNによる収益に加えて、ブログとその運営権をNFTにして売買できる。ブログというコンテンツのみでなく、Webサイトであれば何でもNFTにできるので、今後NFTマーケット上でWebサイトの売買ができ、**WebサイトのM&A**を行うことが可能になる。
+
 
 
 ### 登場人物
@@ -42,7 +43,7 @@ https://blog.2an.co/
 ## このリポジトリについて
 
 ### backend
-<a href="https://strapi.io/">Strapi</a>(headlessCMS)
+- <a href="https://strapi.io/">Strapi</a>(headlessCMS)
 
 ### frontend
 - blogのテンプレート。backend(strapi)からAPIで取得した記事を元にnextのSSGする(実装済)
