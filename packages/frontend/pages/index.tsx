@@ -1,42 +1,32 @@
 import { Header } from "../components/Header";
 import Link from "next/link";
-import { Button, Box, Image, Divider, Heading, Text } from "@chakra-ui/react";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { Box, Image, Divider, Heading, Text } from "@chakra-ui/react";
+import { Footer } from "../components/Footer";
 
 export default function Home() {
-  // TODO: mock
   const itemList: {
+    tokenId: string;
     subDomainSiteName: string;
-    href: any;
     imageUrl: string;
     description: string;
   }[] = [
     {
-      subDomainSiteName: "111111111.webma.site",
-      href: "/",
+      tokenId: "2",
+      subDomainSiteName: "blog.2an.co/",
       imageUrl: "",
-      description: "descriptiondescriptiondescription",
-    },
-    {
-      subDomainSiteName: "2222222222.webma.site",
-      href: "/",
-      imageUrl: "",
-      description: "descriptiondescriptiondescription",
+      description: `LN(Lightning Network)を利用した新しい収益モデルによるブログ運営を可能にするアプリ
+      広告によって収益を生み出している従来のようなブログサイトではなく、
+      読者がブログページへ訪れるためには支払いが必要になるような仕組みが構築されたブログ運営アプリ。
+      また、ブログ運営者は上記のLNによる収益に加えて、運営権をNFTにして売却・購入することも可能。`,
     },
   ];
 
   return (
-    <Box p="12">
+    <Box p="16px" minHeight="100vh" position="relative">
       <Header />
       <Divider />
-      <Link href="/">
-        <Button>
-          <ChevronLeftIcon w={6} h={6} />
-        </Button>
-      </Link>
-      <Divider />
 
-      <Heading as="h2" mt="24px">
+      <Heading as="h2" mt="24px" textAlign="center">
         SITES YOU CAN SEE
         <br />
         WHEN YOU PAY
@@ -44,20 +34,33 @@ export default function Home() {
         WITH LIGHITING⚡️
       </Heading>
 
-      <Heading as="h3" mt="24px">
+      <Heading
+        as="h3"
+        size="lg"
+        fontWeight="extrabold"
+        mt="24px"
+        textAlign="center"
+      >
         Purchasable🙆‍♂️
       </Heading>
 
-      {itemList.map((item,i) => {
+      {itemList.map((item, i) => {
         return (
-          <Box w="fit-content" border="2px solid #000" borderRadius="8px" key={i.toString()}>
-            <Text fontSize="24px" mt="12px" fontWeight="extrabold">
+          <Box key={item.tokenId} w="fit-content" margin="24px auto">
+            <Text
+              fontSize="24px"
+              mt="12px"
+              fontWeight="extrabold"
+              textAlign="center"
+            >
               {item.subDomainSiteName}
             </Text>
-            <Link href={item.href}>
+            <Link href={`/detail/${item.tokenId}`}>
               <Image
+                alt=""
                 src={item.imageUrl}
                 fallbackSrc="https://via.placeholder.com/352x220.png"
+                m="0 auto"
               />
             </Link>
             <Text fontSize="12px" mt="12px">
@@ -67,8 +70,7 @@ export default function Home() {
           </Box>
         );
       })}
-      <Divider mt="24px" />
-      <footer>Copyright © 2022 LSAT App. All right reserved.</footer>
+      <Footer />
     </Box>
   );
 }
