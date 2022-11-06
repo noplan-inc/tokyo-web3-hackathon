@@ -72,6 +72,7 @@ https://blog.2an.co/
 ### `packages/ln-pay-server`
 - 簡易的なテストネット用のウォレットを開発
 - 審査員の方でもlnのノードを立てることなくlnのpaymentが可能に
+- Arweave等の分散ストレージに暗号化して保存
 
 ## 詳細情報
 
